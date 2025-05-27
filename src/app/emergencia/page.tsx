@@ -1,0 +1,38 @@
+'use client'
+import { useState } from 'react';
+import useGeolocation from '../hooks/useGeolocation';
+import callEmergency from '../lib/callEmergency';
+import { useIndexedDB } from '../hooks/useIndexedDB';
+
+export default function Emergencia() {
+  const [emergencyType, setEmergencyType] = useState(null);
+  const location = useGeolocation();
+  const { call } = useCallEmergency();
+  const { save } = useIndexedDB();
+
+  const handleSOS = async () => {
+    if (location) {
+      // Salvar dados localmente
+      save('emergency', { type: emergencyType, location });
+
+      // Chamar serviço de emergência
+      await call(location);
+
+      // Enviar foto (opcional)
+      // ...
+    }
+  };
+
+  return (
+    <div>
+      <h2>Selecione o tipo de desastre</h2>
+      <button onClick={() => setEmergencyType('Incêndio')}>Incêndio</button>
+      <button onClick={() => setEmergencyType('Terremoto')}>Terremoto</button>
+      <button onClick={() => setEmergencyType('Enchente')}>Enchente</button>
+      <button onClick={() => setEmergencyType('Deslizamento')}>Deslizamento</button>
+      <button onClick={() => setEmergencyType('Outro')}>Outro</button>
+
+      <button onClick={handleSOS}>SOS</button>
+    </div>
+  );
+}
