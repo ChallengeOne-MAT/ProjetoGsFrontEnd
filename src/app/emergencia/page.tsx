@@ -12,14 +12,10 @@ export default function Emergencia() {
 
   const handleSOS = async () => {
     if (location) {
-      // Salvar dados localmente
       save('emergency', { type: emergencyType, location });
 
-      // Chamar serviço de emergência
       await call(location);
 
-      // Enviar foto (opcional)
-      // ...
     }
   };
 

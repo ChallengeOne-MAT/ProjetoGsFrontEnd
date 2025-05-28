@@ -16,7 +16,7 @@ export default function Header() {
             <Link href="#popup" className="hover:text-yellow-300 transition-colors">
               Popup
             </Link>
-            <Link href="#integrantes" className="hover:text-yellow-300 transition-colors">
+            <Link href="integrantes" className="hover:text-yellow-300 transition-colors">
               Integrantes
             </Link>
           </nav>
