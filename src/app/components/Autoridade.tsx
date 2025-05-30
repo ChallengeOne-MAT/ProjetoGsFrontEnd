@@ -47,23 +47,23 @@ export default function TelaEmergencia() {
   };
 
   return (
-    <main className="p-6 max-w-md mx-auto bg-white rounded shadow mt-10">
+    <main className="p-6 max-w-md mx-auto bg-white rounded shadow mt-10 transition-all duration-500 ease-in-out">
       {etapa === 1 && (
         <>
-          <h1 className="text-2xl font-bold mb-6 text-blue-700 text-center">
+          <h1 className="text-2xl font-bold mb-6 text-blue-700 text-center animate-fade-in">
             Escolha da Autoridade
           </h1>
-          <ul>
+          <ul className="space-y-3">
             {autoridades.map((a) => (
               <li
                 key={a.id}
-                className={`p-4 border rounded mb-3 cursor-pointer ${
-                  selecionada === a.id ? 'bg-blue-100 border-blue-600' : 'border-gray-300'
+                className={`p-4 border rounded cursor-pointer transition-all duration-300 hover:scale-105 shadow-sm ${
+                  selecionada === a.id ? 'bg-blue-100 border-blue-600 shadow-md' : 'border-gray-300'
                 }`}
                 onClick={() => setSelecionada(a.id)}
               >
                 <div className="flex justify-between items-center">
-                  <span className="font-semibold">{a.nome}</span>
+                  <span className="font-semibold text-gray-800">{a.nome}</span>
                   <a
                     href={`tel:${a.telefone}`}
                     className="text-green-600 font-bold hover:underline"
@@ -73,21 +73,26 @@ export default function TelaEmergencia() {
                     📞
                   </a>
                 </div>
+                {selecionada === a.id && (
+                  <div className="mt-2 text-sm text-gray-600 animate-fade-in">
+                    <strong>Emergências:</strong> {a.eventos.join(', ')}
+                  </div>
+                )}
               </li>
             ))}
           </ul>
           <button
             onClick={prosseguir}
-            className="w-full mt-6 bg-blue-600 text-white py-3 rounded font-semibold hover:bg-blue-700"
+            className="w-full mt-6 bg-blue-600 text-white py-3 rounded font-semibold hover:bg-blue-700 transition-colors duration-300"
           >
-            Prosseguir
+            Prosseguir ➜
           </button>
         </>
       )}
 
       {etapa === 2 && autoridade && (
         <>
-          <h2 className="text-xl font-semibold text-blue-700 mb-4 text-center">
+          <h2 className="text-xl font-semibold text-blue-700 mb-4 text-center animate-fade-in">
             Situação - {autoridade.nome}
           </h2>
 
@@ -123,15 +128,15 @@ export default function TelaEmergencia() {
           <div className="flex justify-between gap-4">
             <button
               onClick={() => setEtapa(1)}
-              className="w-1/2 bg-gray-400 text-white py-2 rounded hover:bg-gray-500"
+              className="w-1/2 bg-gray-400 text-white py-2 rounded hover:bg-gray-500 transition-colors duration-300"
             >
-              Voltar
+              ◀ Voltar
             </button>
             <button
               onClick={enviar}
-              className="w-1/2 bg-green-600 text-white py-2 rounded hover:bg-green-700"
+              className="w-1/2 bg-green-600 text-white py-2 rounded hover:bg-green-700 transition-colors duration-300"
             >
-              Enviar
+              Enviar ✅
             </button>
           </div>
         </>

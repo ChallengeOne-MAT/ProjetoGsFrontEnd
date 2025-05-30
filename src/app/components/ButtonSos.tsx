@@ -1,7 +1,16 @@
 'use client';
 import { useState } from 'react';
 
-export default function Buttonsos() {
+type Contato = {
+  nome: string;
+  telefone: string;
+};
+
+type ButtonSosProps = {
+  contatos?: Contato[];
+};
+
+export default function ButtonSos({ contatos }: ButtonSosProps) {
   const [mensagem, setMensagem] = useState("");
   const [erro, setErro] = useState("");
 
@@ -9,13 +18,24 @@ export default function Buttonsos() {
     setErro("");
     setMensagem("");
 
-    const dados = localStorage.getItem("contatosEmergencia");
-    if (!dados) {
-      setErro("Nenhum contato cadastrado.");
-      return;
-    }
+    let listaContatos: Contato[] = [];
 
-    const contatos = JSON.parse(dados);
+    if (contatos && contatos.length > 0) {
+      listaContatos = contatos;
+    } else {
+      const dados = localStorage.getItem("contatosEmergencia");
+      if (!dados) {
+        setErro("Nenhum contato cadastrado.");
+        return;
+      }
+
+      try {
+        listaContatos = JSON.parse(dados);
+      } catch {
+        setErro("Erro ao ler contatos salvos.");
+        return;
+      }
+    }
 
     if (!navigator.geolocation) {
       setErro("Geolocalização não suportada.");
@@ -26,7 +46,7 @@ export default function Buttonsos() {
       (pos) => {
         const { latitude, longitude } = pos.coords;
 
-        contatos.forEach((contato: any) => {
+        listaContatos.forEach((contato) => {
           alert(`Mensagem enviada para ${contato.nome} (${contato.telefone}) com localização: https://maps.google.com/?q=${latitude},${longitude}`);
         });
 

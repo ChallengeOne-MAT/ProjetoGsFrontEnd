@@ -82,7 +82,7 @@ export default function TelaLogin() {
 
         <p className="mt-4 text-center text-sm text-gray-600">
           Não tem conta?{' '}
-          <a href="/pages/cadastro" className="text-indigo-600 hover:underline">
+          <a href="/pages/home" className="text-indigo-600 hover:underline">
             Cadastre-se aqui
           </a>
         </p>

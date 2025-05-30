@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation'; 
+import { Link } from 'lucide-react';
 
 const validarCPF = (cpf: string) => {
   cpf = cpf.replace(/\D/g, '');
@@ -9,7 +10,7 @@ const validarCPF = (cpf: string) => {
 };
 
 export default function TelaCadastro() {
-  const router = useRouter(); // ✅ OK para app/
+  const router = useRouter(); 
 
   const [cpf, setCpf] = useState('');
   const [nome, setNome] = useState('');
