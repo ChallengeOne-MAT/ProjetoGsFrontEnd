@@ -1,71 +1,84 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import {
   ExclamationTriangleIcon,
   ArrowUpIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import Sos from './components/SosEnergency';
+import ButtonSos from './components/ButtonSos';
+
 const sections = [
   {
     id: 'explicacoes',
     title: '📚 Como agir em desastres naturais',
     description:
       'Saiba os primeiros passos em situações de emergência, como evacuação e contato com autoridades. 🧭📢',
-    link: '/pages/instrucao' 
+    link: '/pages/instrucao',
   },
   {
     id: 'chat',
     title: '💬 Chat de Emergência 24h',
     description:
       'Fale com nossa equipe especializada em situações críticas. Atendimento rápido, humano e eficaz. 🧑‍🚒📱',
-    link: '/chat'
+    link: '/chat',
   },
   {
     id: 'sos-info',
     title: '🆘 Sobre o Botão SOS',
     description:
       'Saiba como o botão atua em situações extremas e por que ele é essencial para sua segurança. 🔒📡',
-    link: '/sos-info'
+    link: '/pages/buttonsos',
   },
   {
     id: 'historico',
     title: '📜 Histórico de Ações',
     description:
       'Acompanhe todas as suas ações de emergência registradas para referência futura. 🗂️🕒',
-    link: '/historico'
+    link: '/historico',
   },
   {
     id: 'dashboard',
     title: '📊 Painel de Ocorrências',
     description:
       'Visualize estatísticas detalhadas sobre suas ações de emergência, incluindo horários e níveis de criticidade. 📈🕒',
-    link: '/dashboard'
-  }
+    link: '/dashboard',
+  },
 ];
-
 
 export default function Home() {
   const [sosStatus, setSosStatus] = useState(false);
   const [location, setLocation] = useState({ lat: -23.56, lng: -46.64 });
 
-  useEffect(() => {
+  const handleSOS = () => {
+    if (!navigator.geolocation) {
+      alert('Geolocalização não é suportada neste navegador.');
+      return;
+    }
+
     navigator.geolocation.getCurrentPosition(
-      (pos) => {
+      async (pos) => {
         const { latitude, longitude } = pos.coords;
         setLocation({ lat: latitude, lng: longitude });
+
+        setSosStatus(true);
+
+        // Substitua pelo seu número de telefone e URL da API-Zap
+        const numero = 'SEU_NUMERO';
+        const mensagem = `🚨 SOS ativado! Localização: https://www.google.com/maps?q=${latitude},${longitude}`;
+
+        try {
+          await fetch(`https://v5.api-zap.com/?numero=${numero}&mensagem=${encodeURIComponent(mensagem)}`);
+          alert('🚨 SOS enviado com sucesso! Localização compartilhada via WhatsApp.');
+        } catch (err) {
+          alert('Erro ao enviar a mensagem para o WhatsApp.');
+        }
       },
       () => {
-        console.warn('Localização não permitida. Usando padrão SP.');
+        alert('Localização não permitida. Por favor, ative o GPS.');
       }
-    );
-  }, []);
-
-  const handleSOS = () => {
-    setSosStatus(true);
-    alert(
-      '🚨 SOS enviado com sucesso! Localização, imagem e contato emergencial compartilhados.'
     );
   };
 
@@ -104,6 +117,8 @@ export default function Home() {
         </p>
       </section>
 
+      <Sos />
+
       <motion.section
         className="max-w-4xl mx-auto text-center bg-white p-10 rounded-3xl shadow-2xl"
         initial={{ opacity: 0, y: 40 }}
@@ -124,6 +139,8 @@ export default function Home() {
         </motion.button>
       </motion.section>
 
+      <ButtonSos contatos={[]} />
+
       <div className="space-y-24 max-w-7xl mx-auto">
         {sections.map((sec, i) => {
           const isEven = i % 2 === 0;
@@ -141,20 +158,17 @@ export default function Home() {
               <div className="max-w-lg text-left">
                 <h3 className="text-2xl font-semibold text-indigo-800 mb-3">{sec.title}</h3>
                 <p className="text-gray-700 mb-4">{sec.description}</p>
-                
-            <Link href={sec.link}>
-  <motion.button
-    whileHover={{ scale: 1.1, boxShadow: '0 0 8px #6366f1' }}
-    whileTap={{ scale: 0.95 }}
-    className="px-5 py-2 bg-indigo-500 text-white rounded-full hover:bg-indigo-600 transition-all"
-  >
-    🔍 Ver mais
-  </motion.button>
-</Link>
-
+                <Link href={sec.link}>
+                  <motion.button
+                    whileHover={{ scale: 1.1, boxShadow: '0 0 8px #6366f1' }}
+                    whileTap={{ scale: 0.95 }}
+                    className="px-5 py-2 bg-indigo-500 text-white rounded-full hover:bg-indigo-600 transition-all"
+                  >
+                    🔍 Ver mais
+                  </motion.button>
+                </Link>
               </div>
             </motion.section>
-            
           );
         })}
       </div>
@@ -205,6 +219,8 @@ export default function Home() {
           allowFullScreen
         ></iframe>
       </section>
+
+      <Link href="/pages/cadastro">Click Here</Link>
     </div>
   );
 }

@@ -1,5 +1,6 @@
+'use client';
 import { useState } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation'; 
 
 const validarCPF = (cpf: string) => {
   cpf = cpf.replace(/\D/g, '');
@@ -8,7 +9,7 @@ const validarCPF = (cpf: string) => {
 };
 
 export default function TelaCadastro() {
-  const router = useRouter();
+  const router = useRouter(); // ✅ OK para app/
 
   const [cpf, setCpf] = useState('');
   const [nome, setNome] = useState('');
@@ -45,7 +46,7 @@ export default function TelaCadastro() {
     usuarios.push({ cpf, nome, email, senha });
     localStorage.setItem('usuarios', JSON.stringify(usuarios));
     alert('Cadastro realizado com sucesso! Agora faça login.');
-    router.push('/login');
+    router.push('/login'); // ✅ funciona com next/navigation
   };
 
   return (
@@ -113,7 +114,7 @@ export default function TelaCadastro() {
 
         <p className="mt-4 text-center text-sm text-gray-600">
           Já tem conta?{' '}
-          <a href="/login" className="text-indigo-600 hover:underline">
+          <a href="/pages/login" className="text-indigo-600 hover:underline">
             Faça login aqui
           </a>
         </p>

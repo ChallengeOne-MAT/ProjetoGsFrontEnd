@@ -1,5 +1,6 @@
+'use client'
 import { useState } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 export default function TelaLogin() {
   const router = useRouter();
@@ -32,7 +33,7 @@ export default function TelaLogin() {
 
     setErro('');
     alert(`Bem-vindo(a), ${usuario.nome}!`);
-   :
+   
     localStorage.setItem('logado', JSON.stringify(usuario));
     router.push('/dashboard'); 
   };
@@ -81,7 +82,7 @@ export default function TelaLogin() {
 
         <p className="mt-4 text-center text-sm text-gray-600">
           Não tem conta?{' '}
-          <a href="/cadastro" className="text-indigo-600 hover:underline">
+          <a href="/pages/cadastro" className="text-indigo-600 hover:underline">
             Cadastre-se aqui
           </a>
         </p>
