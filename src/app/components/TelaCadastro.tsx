@@ -1,16 +1,15 @@
 'use client';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation'; 
-import { Link } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 const validarCPF = (cpf: string) => {
   cpf = cpf.replace(/\D/g, '');
   if (cpf.length !== 11) return false;
-  return true; 
+  return true;
 };
 
 export default function TelaCadastro() {
-  const router = useRouter(); 
+  const router = useRouter();
 
   const [cpf, setCpf] = useState('');
   const [nome, setNome] = useState('');
@@ -47,75 +46,77 @@ export default function TelaCadastro() {
     usuarios.push({ cpf, nome, email, senha });
     localStorage.setItem('usuarios', JSON.stringify(usuarios));
     alert('Cadastro realizado com sucesso! Agora faça login.');
-    router.push('/login'); // ✅ funciona com next/navigation
+    router.push('/login');
   };
 
   return (
-    <main className="min-h-screen flex flex-col justify-center items-center bg-gray-50 px-4">
+    <main className="min-h-screen flex flex-col justify-center items-center bg-black px-4">
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-8 rounded-lg shadow-md w-full max-w-md"
+        className="bg-gray-900 p-8 rounded-lg shadow-lg w-full max-w-md text-white"
       >
-        <h1 className="text-2xl font-bold mb-6 text-indigo-700">Cadastro</h1>
+        <h1 className="text-3xl font-extrabold mb-6 text-orange-500 text-center tracking-wide">
+          Cadastro
+        </h1>
 
         {erro && (
-          <p className="mb-4 text-red-600 font-semibold border border-red-400 bg-red-100 p-2 rounded">
+          <p className="mb-4 text-red-500 font-semibold border border-red-600 bg-red-900 bg-opacity-50 p-3 rounded">
             {erro}
           </p>
         )}
 
-        <label className="block mb-1 font-medium">CPF</label>
+        <label className="block mb-1 font-semibold text-orange-400">CPF</label>
         <input
           type="text"
           maxLength={11}
           value={cpf}
           onChange={(e) => setCpf(e.target.value.replace(/\D/g, ''))}
           placeholder="Somente números"
-          className="w-full p-2 border border-gray-300 rounded mb-4 focus:outline-indigo-500"
+          className="w-full p-3 border border-gray-700 rounded mb-5 bg-black text-white placeholder-gray-500 focus:border-orange-500 focus:outline-none"
           required
         />
 
-        <label className="block mb-1 font-medium">Nome</label>
+        <label className="block mb-1 font-semibold text-orange-400">Nome</label>
         <input
           type="text"
           value={nome}
           onChange={(e) => setNome(e.target.value)}
           placeholder="Seu nome completo"
-          className="w-full p-2 border border-gray-300 rounded mb-4 focus:outline-indigo-500"
+          className="w-full p-3 border border-gray-700 rounded mb-5 bg-black text-white placeholder-gray-500 focus:border-orange-500 focus:outline-none"
           required
         />
 
-        <label className="block mb-1 font-medium">Email</label>
+        <label className="block mb-1 font-semibold text-orange-400">Email</label>
         <input
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="exemplo@dominio.com"
-          className="w-full p-2 border border-gray-300 rounded mb-4 focus:outline-indigo-500"
+          className="w-full p-3 border border-gray-700 rounded mb-5 bg-black text-white placeholder-gray-500 focus:border-orange-500 focus:outline-none"
           required
         />
 
-        <label className="block mb-1 font-medium">Senha</label>
+        <label className="block mb-1 font-semibold text-orange-400">Senha</label>
         <input
           type="password"
           value={senha}
           onChange={(e) => setSenha(e.target.value)}
           placeholder="Mínimo 6 caracteres"
           minLength={6}
-          className="w-full p-2 border border-gray-300 rounded mb-6 focus:outline-indigo-500"
+          className="w-full p-3 border border-gray-700 rounded mb-7 bg-black text-white placeholder-gray-500 focus:border-orange-500 focus:outline-none"
           required
         />
 
         <button
           type="submit"
-          className="w-full bg-indigo-600 text-white py-3 rounded font-semibold hover:bg-indigo-700 transition"
+          className="w-full bg-gradient-to-r from-red-600 via-orange-500 to-yellow-400 text-black py-3 rounded-lg font-bold hover:brightness-110 transition duration-300"
         >
           Cadastrar
         </button>
 
-        <p className="mt-4 text-center text-sm text-gray-600">
+        <p className="mt-6 text-center text-sm text-gray-400">
           Já tem conta?{' '}
-          <a href="/pages/login" className="text-indigo-600 hover:underline">
+          <a href="/pages/login" className="text-orange-500 hover:underline">
             Faça login aqui
           </a>
         </p>

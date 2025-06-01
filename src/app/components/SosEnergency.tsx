@@ -1,7 +1,7 @@
   'use client'
   import Link from "next/link";
   import { useState, useEffect } from "react";
-  import { Plus, X } from 'lucide-react'; // Ícones
+  import { Plus, X } from 'lucide-react'; 
 
   type Contato = {
     id: number;

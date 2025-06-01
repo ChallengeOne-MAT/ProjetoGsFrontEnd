@@ -14,7 +14,7 @@ const EscolhaPerfil = () => {
       const timer = setTimeout(() => {
         setCarregando(false);
         if (tipoUsuario === 'usuario') {
-          navigate('/home');
+          navigate('/pages/home');
         }
       }, 2000); 
       return () => clearTimeout(timer);

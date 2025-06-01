@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 type Contato = {
   nome: string;
-  telefone: string;
+  telefone: string; 
 };
 
 type ButtonSosProps = {
@@ -46,11 +46,22 @@ export default function ButtonSos({ contatos }: ButtonSosProps) {
       (pos) => {
         const { latitude, longitude } = pos.coords;
 
+        const linkMapa = `https://maps.google.com/?q=${latitude},${longitude}`;
+        const texto = encodeURIComponent(
+          `🚨 ALERTA DE EMERGÊNCIA 🚨\n\nRecebemos um pedido de socorro agora.\n\n📍 Localização: ${linkMapa}\n\n⚠️ Entre em contato imediatamente!`
+        );
+
         listaContatos.forEach((contato) => {
-          alert(`Mensagem enviada para ${contato.nome} (${contato.telefone}) com localização: https://maps.google.com/?q=${latitude},${longitude}`);
+          const tel = contato.telefone.replace(/\D/g, "");
+          const linkWhats = `https://wa.me/${tel}?text=${texto}`;
+          window.open(linkWhats, "_blank");
         });
 
-        setMensagem("SOS acionado com sucesso!");
+        const telefoneADM = "+5511915353752"; 
+        const linkADM = `https://wa.me/${telefoneADM.replace(/\D/g, "")}?text=${texto}`;
+        window.open(linkADM, "_blank");
+
+        setMensagem("Mensagens de emergência foram preparadas no WhatsApp.");
       },
       () => {
         setErro("Erro ao obter localização.");
@@ -62,13 +73,13 @@ export default function ButtonSos({ contatos }: ButtonSosProps) {
     <div>
       <button
         onClick={acionarSOS}
-        className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+        className="bg-red-600 text-white px-6 py-3 rounded hover:bg-red-700 font-bold text-lg"
       >
-        SOS
+        🚨 Acionar SOS
       </button>
 
-      {mensagem && <p className="text-green-600 mt-2">{mensagem}</p>}
-      {erro && <p className="text-red-600 mt-2">{erro}</p>}
+      {mensagem && <p className="text-green-600 mt-3">{mensagem}</p>}
+      {erro && <p className="text-red-600 mt-3">{erro}</p>}
     </div>
   );
 }
