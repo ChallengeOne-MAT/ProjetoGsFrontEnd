@@ -2,7 +2,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import EscolhaPerfil from './components/EscolhaPerfil';
-
+import DashboardADM from './components/DashboardADM';
 
 const App = () => {
   return (
