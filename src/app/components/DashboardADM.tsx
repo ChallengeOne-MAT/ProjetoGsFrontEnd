@@ -181,7 +181,7 @@ export default function DashboardADM() {
                     </a>
                   </td>
                   <td className="border border-gray-700 p-2">
-                    {o.foto ? (
+                    {o.foto && (o.foto.startsWith('http') || o.foto.startsWith('data:image')) ? (
                       <Image
                         src={o.foto}
                         alt="Foto"
