@@ -15,11 +15,22 @@ import {
 import { Bar } from 'react-chartjs-2';
 import 'leaflet/dist/leaflet.css';
 
+import { useMap } from 'react-leaflet'; 
+
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const Map = dynamic(() => import('react-leaflet').then(mod => mod.MapContainer), { ssr: false });
+const MapContainer = dynamic(() => import('react-leaflet').then(mod => mod.MapContainer), { ssr: false });
 const TileLayer = dynamic(() => import('react-leaflet').then(mod => mod.TileLayer), { ssr: false });
 const Marker = dynamic(() => import('react-leaflet').then(mod => mod.Marker), { ssr: false });
+
+// Componente para ajustar a view do mapa ao mudar as coordenadas
+function SetViewOnCoords({ coords }: { coords: [number, number] }) {
+  const map = useMap();
+  useEffect(() => {
+    map.setView(coords);
+  }, [coords, map]);
+  return null;
+}
 
 interface Ocorrencia {
   dataHora: string;
@@ -152,61 +163,112 @@ export default function DashboardADM() {
 
       <h2 className="text-2xl font-semibold mb-4 text-yellow-400">Relatório Detalhado</h2>
       <div className="overflow-auto text-sm rounded-lg shadow border border-gray-700">
-        <table className="w-full table-auto text-white bg-gray-800 rounded">
-          <thead className="bg-gray-900 text-yellow-400">
-            <tr>
-              {['Data/Hora', 'Autoridade', 'Tipo', 'Descrição', 'CEP', 'Localização', 'Foto', 'Status', 'Ação'].map((col, i) => (
-                <th key={i} className="border border-gray-700 p-2 text-sm font-semibold">{col}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {ocorrenciasPaginadas.map((o, idx) => {
-              const indexGlobal = ocorrencias.findIndex((oc) => oc.dataHora === o.dataHora);
-              return (
-                <tr key={idx} className="hover:bg-gray-700">
-                  <td className="border border-gray-700 p-2">{o.dataHora}</td>
-                  <td className="border border-gray-700 p-2">{o.autoridade}</td>
-                  <td className="border border-gray-700 p-2">{o.tipo}</td>
-                  <td className="border border-gray-700 p-2">{o.descricao}</td>
-                  <td className="border border-gray-700 p-2">{o.cep}</td>
-                  <td className="border border-gray-700 p-2">
-                    <a
-                      className="text-blue-400 underline"
-                      href={`https://www.google.com/maps?q=${o.latitude},${o.longitude}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Ver no Mapa
-                    </a>
-                  </td>
-                  <td className="border border-gray-700 p-2">
-                    {o.foto && (o.foto.startsWith('http') || o.foto.startsWith('data:image')) ? (
-                      <Image
-                        src={o.foto}
-                        alt="Foto"
-                        width={80}
-                        height={80}
-                        className="object-cover rounded"
-                      />
-                    ) : 'Sem foto'}
-                  </td>
-                  <td className="border border-gray-700 p-2">{o.status}</td>
-                  <td className="border border-gray-700 p-2 text-center">
-                    {o.status !== 'Resolvida' && (
-                      <button
-                        onClick={() => marcarComoResolvida(indexGlobal)}
-                        className="bg-orange-500 text-white px-3 py-1 rounded hover:bg-orange-600"
-                      >
-                        Resolver
-                      </button>
-                    )}
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+      
+<div className="hidden md:block overflow-auto text-sm rounded-lg shadow border border-gray-700">
+  <table className="w-full table-auto text-white bg-gray-800 rounded">
+    <thead className="bg-gray-900 text-yellow-400">
+      <tr>
+        {['Data/Hora', 'Autoridade', 'Tipo', 'Descrição', 'CEP', 'Localização', 'Foto', 'Status', 'Ação'].map((col, i) => (
+          <th key={i} className="border border-gray-700 p-2 text-sm font-semibold">{col}</th>
+        ))}
+      </tr>
+    </thead>
+    <tbody>
+      {ocorrenciasPaginadas.map((o, idx) => {
+        const indexGlobal = ocorrencias.findIndex((oc) => oc.dataHora === o.dataHora);
+        return (
+          <tr key={idx} className="hover:bg-gray-700">
+            <td className="border border-gray-700 p-2">{o.dataHora}</td>
+            <td className="border border-gray-700 p-2">{o.autoridade}</td>
+            <td className="border border-gray-700 p-2">{o.tipo}</td>
+            <td className="border border-gray-700 p-2">{o.descricao}</td>
+            <td className="border border-gray-700 p-2">{o.cep}</td>
+            <td className="border border-gray-700 p-2">
+              <a
+                className="text-blue-400 underline"
+                href={`https://www.google.com/maps?q=${o.latitude},${o.longitude}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Ver no Mapa
+              </a>
+            </td>
+            <td className="border border-gray-700 p-2">
+              {o.foto && (o.foto.startsWith('http') || o.foto.startsWith('data:image')) ? (
+                <Image
+                  src={o.foto}
+                  alt="Foto"
+                  width={80}
+                  height={80}
+                  className="object-cover rounded"
+                />
+              ) : 'Sem foto'}
+            </td>
+            <td className="border border-gray-700 p-2">{o.status}</td>
+            <td className="border border-gray-700 p-2 text-center">
+              {o.status !== 'Resolvida' && (
+                <button
+                  onClick={() => marcarComoResolvida(indexGlobal)}
+                  className="bg-orange-500 text-white px-3 py-1 rounded hover:bg-orange-600"
+                >
+                  Resolver
+                </button>
+              )}
+            </td>
+          </tr>
+        );
+      })}
+    </tbody>
+  </table>
+</div>
+
+<div className="md:hidden space-y-4">
+  {ocorrenciasPaginadas.map((o, idx) => {
+    const indexGlobal = ocorrencias.findIndex((oc) => oc.dataHora === o.dataHora);
+    return (
+      <div key={idx} className="bg-gray-800 p-4 rounded shadow border border-gray-700 space-y-2">
+        <p><strong className="text-yellow-400">Data/Hora:</strong> {o.dataHora}</p>
+        <p><strong className="text-yellow-400">Autoridade:</strong> {o.autoridade}</p>
+        <p><strong className="text-yellow-400">Tipo:</strong> {o.tipo}</p>
+        <p><strong className="text-yellow-400">Descrição:</strong> {o.descricao}</p>
+        <p><strong className="text-yellow-400">CEP:</strong> {o.cep}</p>
+        <p>
+          <strong className="text-yellow-400">Localização:</strong>{' '}
+          <a
+            className="text-blue-400 underline"
+            href={`https://www.google.com/maps?q=${o.latitude},${o.longitude}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Ver no Mapa
+          </a>
+        </p>
+        <p>
+          <strong className="text-yellow-400">Foto:</strong>{' '}
+          {o.foto && (o.foto.startsWith('http') || o.foto.startsWith('data:image')) ? (
+            <Image
+              src={o.foto}
+              alt="Foto"
+              width={100}
+              height={100}
+              className="object-cover rounded"
+            />
+          ) : 'Sem foto'}
+        </p>
+        <p><strong className="text-yellow-400">Status:</strong> {o.status}</p>
+        {o.status !== 'Resolvida' && (
+          <button
+            onClick={() => marcarComoResolvida(indexGlobal)}
+            className="mt-2 bg-orange-500 text-white px-3 py-1 rounded hover:bg-orange-600"
+          >
+            Resolver
+          </button>
+        )}
+      </div>
+    );
+  })}
+</div>
+
       </div>
 
       <div className="mt-6 flex justify-center flex-wrap gap-2">
@@ -229,7 +291,7 @@ export default function DashboardADM() {
         <h2 className="text-2xl font-semibold mb-4 text-yellow-400">Última Localização Registrada</h2>
         <div className="w-full h-[300px] md:h-[400px] lg:h-[500px] border border-white rounded overflow-hidden">
           {ultimaOcorrencia && (
-            <Map
+            <MapContainer
               center={[ultimaOcorrencia.latitude, ultimaOcorrencia.longitude]}
               zoom={15}
               scrollWheelZoom={false}
@@ -237,7 +299,8 @@ export default function DashboardADM() {
             >
               <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
               <Marker position={[ultimaOcorrencia.latitude, ultimaOcorrencia.longitude]} />
-            </Map>
+              <SetViewOnCoords coords={[ultimaOcorrencia.latitude, ultimaOcorrencia.longitude]} />
+            </MapContainer>
           )}
         </div>
       </div>
