@@ -6,8 +6,7 @@ import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import Image from 'next/image';
 
 export default function IntegrantesPage() {
-
-     const [selectedUserIndex, setSelectedUserIndex] = useState<number | null>(null);
+  const [selectedUserIndex, setSelectedUserIndex] = useState<number | null>(null);
 
   const users = [
     {
@@ -41,35 +40,43 @@ export default function IntegrantesPage() {
       photo: '/img/matteuss.png',
     },
   ];
+
   return (
     <main className="p-6 max-w-xl mx-auto">
       <section className="mt-20">
-          <h2 className="text-3xl font-bold text-[#42807D] text-center mb-20">Membros do Projeto</h2>
-          <motion.div
-            className="w-full grid sm:grid-cols-2 gap-8"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-          >
-            {users.map((user, index) => (
-              <motion.div
-                key={index}
-                className="relative p-6 pt-20 mb-10 rounded-xl shadow-md bg-white border-3 border-blue-600 hover:shadow-xl cursor-pointer text-center"
-                whileHover={{ scale: 1.05 }}
-                onClick={() => setSelectedUserIndex(index)}
-              >
-                <div className="absolute top-[-48px] left-1/2 transform -translate-x-1/2 w-24 h-24 rounded-full border-4 border-blue shadow-lg overflow-hidden">
-                  <Image
-                    src={user.photo}
-                    alt={user.name}
-                    width={126}
-                    height={126}
-                    className="object-cover rounded-full"
-                  />
-                </div>
-                <h1 className="font-bold text-xl text-[#42807D] mt-3">{user.name}</h1>
-                <p className="text-sm text-gray-500">{user.rm}</p>
-                <div className="flex justify-center gap-4 mt-2">
+        <h2 className="text-3xl font-bold text-[#42807D] text-center mb-20">Membros do Projeto</h2>
+        <motion.div
+          className="w-full grid sm:grid-cols-2 gap-8"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          {users.map((user, index) => (
+            <motion.div
+              key={index}
+              className={`relative p-6 pt-20 mb-10 rounded-xl shadow-md bg-white border-4 
+                ${
+                  selectedUserIndex === index
+                    ? 'border-green-600 scale-105 shadow-2xl'
+                    : 'border-blue-600'
+                }
+                hover:shadow-xl cursor-pointer text-center transition-all duration-300`}
+              whileHover={{ scale: 1.05 }}
+              onClick={() => setSelectedUserIndex(index)}
+            >
+              <div className="absolute top-[-48px] left-1/2 transform -translate-x-1/2 w-24 h-24 rounded-full border-4 border-blue shadow-lg overflow-hidden">
+                <Image
+                  src={user.photo}
+                  alt={user.name}
+                  width={126}
+                  height={126}
+                  className="object-cover rounded-full"
+                />
+              </div>
+              <h1 className="font-bold text-xl text-[#42807D] mt-3">{user.name}</h1>
+              <p className="text-sm text-gray-500">{user.rm}</p>
+              <div className="flex justify-center gap-4 mt-2">
+                {user.github && (
                   <motion.a
                     href={user.github}
                     target="_blank"
@@ -78,6 +85,8 @@ export default function IntegrantesPage() {
                   >
                     <FaGithub size={20} />
                   </motion.a>
+                )}
+                {user.linkedin && (
                   <motion.a
                     href={user.linkedin}
                     target="_blank"
@@ -86,12 +95,12 @@ export default function IntegrantesPage() {
                   >
                     <FaLinkedin size={20} />
                   </motion.a>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </section>
-
+                )}
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+      </section>
     </main>
   );
 }

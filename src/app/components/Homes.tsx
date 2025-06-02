@@ -5,7 +5,6 @@ import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
-import { enviarMensagemWhatsApp } from '../lib/twilio';
 
 const sections = [
   {
@@ -64,8 +63,7 @@ export default function Home() {
     if (Notification.permission === "granted") {
       contatos.forEach((contato) => {
         new Notification(`Alerta SOS!`, {
-          body: `O usuário acionou o SOS. Notificando: ${contato.nome} (${contato.contato})`,
-          icon: '/icons/imglogo', // opcional, coloque seu ícone
+          body: `O usuário acionou o SOS. Notificando: ${contato.nome} (${contato.contato})`
         });
       });
     } else if (Notification.permission !== "denied") {

@@ -2,11 +2,17 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-const validarCPF = (cpf: string) => {
+const validarCPF = (cpf: string): boolean => {
   cpf = cpf.replace(/\D/g, '');
-  if (cpf.length !== 11) return false;
-  return true;
+  return cpf.length === 11;
 };
+
+interface Usuario {
+  cpf: string;
+  nome: string;
+  email: string;
+  senha: string;
+}
 
 export default function TelaCadastro() {
   const router = useRouter();
@@ -17,7 +23,7 @@ export default function TelaCadastro() {
   const [senha, setSenha] = useState('');
   const [erro, setErro] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!validarCPF(cpf)) {
@@ -37,8 +43,9 @@ export default function TelaCadastro() {
       return;
     }
 
-    const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
-    if (usuarios.find((u: any) => u.cpf === cpf)) {
+    const usuarios: Usuario[] = JSON.parse(localStorage.getItem('usuarios') || '[]');
+
+    if (usuarios.find((u) => u.cpf === cpf)) {
       setErro('CPF já cadastrado.');
       return;
     }
@@ -116,7 +123,7 @@ export default function TelaCadastro() {
 
         <p className="mt-6 text-center text-sm text-gray-400">
           Já tem conta?{' '}
-          <a href="/pages/login" className="text-orange-500 hover:underline">
+          <a href="/login" className="text-orange-500 hover:underline">
             Faça login aqui
           </a>
         </p>

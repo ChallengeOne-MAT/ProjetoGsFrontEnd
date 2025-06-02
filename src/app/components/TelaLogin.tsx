@@ -2,6 +2,13 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
+interface Usuario {
+  cpf: string;
+  nome: string;
+  email: string;
+  senha: string;
+}
+
 export default function TelaLogin() {
   const router = useRouter();
 
@@ -9,7 +16,7 @@ export default function TelaLogin() {
   const [senha, setSenha] = useState('');
   const [erro, setErro] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (cpf.length !== 11) {
@@ -21,9 +28,10 @@ export default function TelaLogin() {
       return;
     }
 
-    const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
+    const usuarios: Usuario[] = JSON.parse(localStorage.getItem('usuarios') || '[]');
+
     const usuario = usuarios.find(
-      (u: any) => u.cpf === cpf && u.senha === senha
+      (u) => u.cpf === cpf && u.senha === senha
     );
 
     if (!usuario) {
@@ -33,7 +41,6 @@ export default function TelaLogin() {
 
     setErro('');
     alert(`Bem-vindo(a), ${usuario.nome}!`);
-
     localStorage.setItem('logado', JSON.stringify(usuario));
     router.push('/dashboard');
   };
@@ -84,7 +91,7 @@ export default function TelaLogin() {
 
         <p className="mt-6 text-center text-sm text-gray-400">
           Não tem conta?{' '}
-          <a href="/pages/home" className="text-orange-500 hover:underline">
+          <a href="/home" className="text-orange-500 hover:underline">
             Cadastre-se aqui
           </a>
         </p>
