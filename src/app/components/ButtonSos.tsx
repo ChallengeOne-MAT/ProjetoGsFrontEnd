@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 type Contato = {
   nome: string;
-  telefone: string; 
+  telefone: string;
 };
 
 type ButtonSosProps = {
@@ -11,60 +11,69 @@ type ButtonSosProps = {
 };
 
 export default function ButtonSos({ contatos }: ButtonSosProps) {
-  const [mensagem, setMensagem] = useState("");
-  const [erro, setErro] = useState("");
+  const [mensagem, setMensagem] = useState('');
+  const [erro, setErro] = useState('');
+  const [carregando, setCarregando] = useState(false);
 
   const acionarSOS = () => {
-    setErro("");
-    setMensagem("");
+    setErro('');
+    setMensagem('');
+    setCarregando(true);
 
     let listaContatos: Contato[] = [];
 
     if (contatos && contatos.length > 0) {
       listaContatos = contatos;
     } else {
-      const dados = localStorage.getItem("contatosEmergencia");
+      const dados = localStorage.getItem('contatosEmergencia');
       if (!dados) {
-        setErro("Nenhum contato cadastrado.");
+        setErro('Nenhum contato cadastrado.');
+        setCarregando(false);
         return;
       }
-
       try {
         listaContatos = JSON.parse(dados);
       } catch {
-        setErro("Erro ao ler contatos salvos.");
+        setErro('Erro ao ler contatos salvos.');
+        setCarregando(false);
         return;
       }
     }
 
     if (!navigator.geolocation) {
-      setErro("Geolocalização não suportada.");
+      setErro('Geolocalização não suportada pelo navegador.');
+      setCarregando(false);
       return;
     }
 
     navigator.geolocation.getCurrentPosition(
-      (pos) => {
+      async (pos) => {
         const { latitude, longitude } = pos.coords;
-
         const linkMapa = `https://maps.google.com/?q=${latitude},${longitude}`;
-        const texto = encodeURIComponent(
-          `🚨 ALERTA DE EMERGÊNCIA 🚨\n\nRecebemos um pedido de socorro agora.\n\n📍 Localização: ${linkMapa}\n\n⚠️ Entre em contato imediatamente!`
-        );
 
-        listaContatos.forEach((contato) => {
-          const tel = contato.telefone.replace(/\D/g, "");
-          const linkWhats = `https://wa.me/${tel}?text=${texto}`;
-          window.open(linkWhats, "_blank");
-        });
+        try {
+          const response = await fetch('/api/notificar-contatos', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ contatos: listaContatos, linkMapa }),
+          });
 
-        const telefoneADM = "+5511915353752"; 
-        const linkADM = `https://wa.me/${telefoneADM.replace(/\D/g, "")}?text=${texto}`;
-        window.open(linkADM, "_blank");
+          const data = await response.json();
 
-        setMensagem("Mensagens de emergência foram preparadas no WhatsApp.");
+          if (response.ok && data.sucesso) {
+            setMensagem('Mensagens enviadas automaticamente via WhatsApp.');
+          } else {
+            setErro(data.erro || 'Erro ao enviar mensagens.');
+          }
+        } catch {
+          setErro('Erro de conexão com o servidor.');
+        }
+
+        setCarregando(false);
       },
       () => {
-        setErro("Erro ao obter localização.");
+        setErro('Erro ao obter localização.');
+        setCarregando(false);
       }
     );
   };
@@ -73,9 +82,12 @@ export default function ButtonSos({ contatos }: ButtonSosProps) {
     <div>
       <button
         onClick={acionarSOS}
-        className="bg-red-600 text-white px-6 py-3 rounded hover:bg-red-700 font-bold text-lg"
+        disabled={carregando}
+        className={`bg-red-600 text-white px-6 py-3 rounded font-bold text-lg hover:bg-red-700 ${
+          carregando ? 'opacity-50 cursor-not-allowed' : ''
+        }`}
       >
-        🚨 Acionar SOS
+        {carregando ? 'Enviando...' : '🚨 Acionar SOS'}
       </button>
 
       {mensagem && <p className="text-green-600 mt-3">{mensagem}</p>}

@@ -1,5 +1,7 @@
+'use client';
+
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const EscolhaPerfil = () => {
   const [tipoUsuario, setTipoUsuario] = useState<"usuario" | "adm" | null>(null);
@@ -14,9 +16,9 @@ const EscolhaPerfil = () => {
       const timer = setTimeout(() => {
         setCarregando(false);
         if (tipoUsuario === 'usuario') {
-          navigate('/pages/home');
+          navigate('/pages/cadastro');
         }
-      }, 2000); 
+      }, 2000);
       return () => clearTimeout(timer);
     }
   }, [carregando, tipoUsuario, navigate]);

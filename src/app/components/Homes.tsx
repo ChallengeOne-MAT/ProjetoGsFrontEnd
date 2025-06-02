@@ -5,6 +5,7 @@ import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
+import { enviarMensagemWhatsApp } from '../lib/twilio';
 
 const sections = [
   {
@@ -44,7 +45,6 @@ const sections = [
   },
 ];
 
-// Simulando contatos cadastrados para receber SOS
 const contatos = [
   { id: 1, nome: 'Maria', contato: '+55 11 99999-1111' },
   { id: 2, nome: 'João', contato: '+55 11 99999-2222' },
@@ -55,7 +55,6 @@ export default function Home() {
   const [sosStatus, setSosStatus] = useState(false);
   const router = useRouter();
 
-  // Função para pedir permissão e disparar notificações para contatos
   const dispararNotificacoes = () => {
     if (!("Notification" in window)) {
       alert("Seu navegador não suporta notificações.");
@@ -66,7 +65,7 @@ export default function Home() {
       contatos.forEach((contato) => {
         new Notification(`Alerta SOS!`, {
           body: `O usuário acionou o SOS. Notificando: ${contato.nome} (${contato.contato})`,
-          icon: '/icons/alert-icon.png', // opcional, coloque seu ícone
+          icon: '/icons/imglogo', // opcional, coloque seu ícone
         });
       });
     } else if (Notification.permission !== "denied") {
