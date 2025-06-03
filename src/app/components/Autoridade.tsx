@@ -22,7 +22,6 @@ export default function TelaEmergencia() {
 
   const autoridade = autoridades.find(a => a.id === selecionada);
 
-  // Função para validar o CEP (formato brasileiro: 5 dígitos + hífen + 3 dígitos ou só números)
   const validarCEP = (cep: string) => {
     const cepLimpo = cep.replace(/\D/g, '');
     return cepLimpo.length === 8;
@@ -46,6 +45,8 @@ export default function TelaEmergencia() {
       (pos) => {
         setLatitude(pos.coords.latitude);
         setLongitude(pos.coords.longitude);
+        console.log('Latitude:', pos.coords.latitude);
+        console.log('Longitude:', pos.coords.longitude);
         setCarregandoLocalizacao(false);
         setEtapa(2);
       },
@@ -74,14 +75,10 @@ export default function TelaEmergencia() {
       return;
     }
 
-    // Opção: validar tamanho máximo do texto da descrição
     if (descricao.length > 500) {
       alert('Descrição muito longa. Limite de 500 caracteres.');
       return;
     }
-
-    // Aqui você pode implementar um upload real da foto (opcional)
-    // Por ora, só salvamos o nome do arquivo
 
     const novaOcorrencia = {
       id_ocorrencia: Date.now(),
@@ -108,7 +105,6 @@ export default function TelaEmergencia() {
       return;
     }
 
-    // Resetar estados
     setEtapa(1);
     setSelecionada(null);
     setEventoSelecionado('');
@@ -138,7 +134,9 @@ export default function TelaEmergencia() {
               <li
                 key={a.id}
                 className={`p-5 border rounded-lg cursor-pointer transition-transform duration-300 hover:scale-105 shadow-md focus:outline-none focus:ring-2 focus:ring-orange-500 ${
-                  selecionada === a.id ? 'bg-red-700 border-red-500' : 'border-gray-700 hover:border-orange-500'
+                  selecionada === a.id
+                    ? 'bg-gray-600 bg-opacity-60 border-gray-500 text-yellow-300'
+                    : 'border-gray-700 hover:border-orange-500 text-white'
                 }`}
                 onClick={() => setSelecionada(a.id)}
                 tabIndex={0}
@@ -152,7 +150,7 @@ export default function TelaEmergencia() {
                 role="option"
               >
                 <div className="flex justify-between items-center">
-                  <span className="font-semibold text-yellow-400">{a.nome}</span>
+                  <span className="font-semibold">{a.nome}</span>
                   <a
                     href={`tel:${a.telefone}`}
                     onClick={(e) => e.stopPropagation()}
@@ -250,12 +248,13 @@ export default function TelaEmergencia() {
             id="foto"
             type="file"
             accept="image/*"
+            capture="environment"
             onChange={(e) => setFoto(e.target.files?.[0] || null)}
             className="mb-5 text-white"
             aria-describedby="foto-ajuda"
           />
           <div id="foto-ajuda" className="text-gray-400 text-sm mb-5">
-            Apenas imagens são aceitas. O upload será feito localmente.
+            Tire uma foto com a câmera ou escolha um arquivo.
           </div>
 
           <label
@@ -271,7 +270,7 @@ export default function TelaEmergencia() {
             onChange={(e) => setCep(e.target.value)}
             className="w-full p-3 border border-gray-700 rounded-lg mb-6 bg-black text-white focus:border-orange-500 focus:outline-none"
             placeholder="Digite seu CEP"
-            maxLength={9} // permite formato com hífen
+            maxLength={9}
             aria-describedby="cep-ajuda"
           />
           <div id="cep-ajuda" className="text-gray-400 text-sm mb-6">
@@ -287,6 +286,7 @@ export default function TelaEmergencia() {
             </button>
             <button
               onClick={enviar}
+              
               className="w-1/2 bg-gradient-to-r from-red-600 via-orange-500 to-yellow-400 text-black py-3 rounded-lg font-bold hover:brightness-110 transition focus:outline-none focus:ring-4 focus:ring-yellow-400"
             >
               Enviar ✅

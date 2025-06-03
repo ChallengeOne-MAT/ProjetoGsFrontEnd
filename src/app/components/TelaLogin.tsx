@@ -49,7 +49,7 @@ export default function TelaLogin() {
     <main className="min-h-screen flex flex-col justify-center items-center bg-black px-4">
       <form
         onSubmit={handleSubmit}
-        className="bg-gray-900 p-8 rounded-lg shadow-lg w-full max-w-md text-white"
+        className="bg-gray-900 p-8 rounded-lg shadow-lg w-[90%] sm:w-full max-w-md text-white"
       >
         <h1 className="text-3xl font-extrabold mb-6 text-orange-500 text-center tracking-wide">
           Login
@@ -72,7 +72,7 @@ export default function TelaLogin() {
           required
         />
 
-        <label className="block mb-1 font-semibold text-orange-400">Senha</label>
+        <label className="block mb-1 mt-[4%] font-semibold text-orange-400">Senha</label>
         <input
           type="password"
           value={senha}
@@ -84,7 +84,7 @@ export default function TelaLogin() {
 
         <button
           type="submit"
-          className="w-full bg-gradient-to-r from-red-600 via-orange-500 to-yellow-400 text-black py-3 rounded-lg font-bold hover:brightness-110 transition duration-300"
+          className="w-full bg-gradient-to-r mt-[9%] from-red-600 via-orange-500 to-yellow-400 text-black py-3 rounded-lg font-bold hover:brightness-110 transition duration-300"
         >
           Entrar
         </button>

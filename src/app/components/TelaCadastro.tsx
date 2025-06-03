@@ -21,17 +21,18 @@ export default function TelaCadastro() {
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
+  const [confirmarSenha, setConfirmarSenha] = useState('');
   const [erro, setErro] = useState('');
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!validarCPF(cpf)) {
-      setErro('CPF inválido. Deve conter 11 números.');
-      return;
-    }
     if (!nome.trim()) {
       setErro('Nome é obrigatório.');
+      return;
+    }
+    if (!validarCPF(cpf)) {
+      setErro('CPF inválido. Deve conter 11 números.');
       return;
     }
     if (!email.includes('@')) {
@@ -40,6 +41,10 @@ export default function TelaCadastro() {
     }
     if (senha.length < 6) {
       setErro('Senha deve ter ao menos 6 caracteres.');
+      return;
+    }
+    if (senha !== confirmarSenha) {
+      setErro('As senhas não coincidem.');
       return;
     }
 
@@ -60,7 +65,7 @@ export default function TelaCadastro() {
     <main className="min-h-screen flex flex-col justify-center items-center bg-black px-4">
       <form
         onSubmit={handleSubmit}
-        className="bg-gray-900 p-8 rounded-lg shadow-lg w-full max-w-md text-white"
+        className="bg-gray-900 p-8 rounded-lg shadow-lg w-full max-w-md text-white sm:w-full sm:max-w-[90%] md:max-w-md"
       >
         <h1 className="text-3xl font-extrabold mb-6 text-orange-500 text-center tracking-wide">
           Cadastro
@@ -72,6 +77,16 @@ export default function TelaCadastro() {
           </p>
         )}
 
+        <label className="block mb-1 font-semibold text-orange-400">Nome</label>
+        <input
+          type="text"
+          value={nome}
+          onChange={(e) => setNome(e.target.value)}
+          placeholder="Seu nome completo"
+          className="w-full p-3 border border-gray-700 rounded mb-5 bg-black text-white placeholder-gray-500 focus:border-orange-500 focus:outline-none"
+          required
+        />
+
         <label className="block mb-1 font-semibold text-orange-400">CPF</label>
         <input
           type="text"
@@ -79,16 +94,6 @@ export default function TelaCadastro() {
           value={cpf}
           onChange={(e) => setCpf(e.target.value.replace(/\D/g, ''))}
           placeholder="Somente números"
-          className="w-full p-3 border border-gray-700 rounded mb-5 bg-black text-white placeholder-gray-500 focus:border-orange-500 focus:outline-none"
-          required
-        />
-
-        <label className="block mb-1 font-semibold text-orange-400">Nome</label>
-        <input
-          type="text"
-          value={nome}
-          onChange={(e) => setNome(e.target.value)}
-          placeholder="Seu nome completo"
           className="w-full p-3 border border-gray-700 rounded mb-5 bg-black text-white placeholder-gray-500 focus:border-orange-500 focus:outline-none"
           required
         />
@@ -110,6 +115,17 @@ export default function TelaCadastro() {
           onChange={(e) => setSenha(e.target.value)}
           placeholder="Mínimo 6 caracteres"
           minLength={6}
+          className="w-full p-3 border border-gray-700 rounded mb-5 bg-black text-white placeholder-gray-500 focus:border-orange-500 focus:outline-none"
+          required
+        />
+
+        <label className="block mb-1 font-semibold text-orange-400">Confirmar Senha</label>
+        <input
+          type="password"
+          value={confirmarSenha}
+          onChange={(e) => setConfirmarSenha(e.target.value)}
+          placeholder="Confirme sua senha"
+          minLength={6}
           className="w-full p-3 border border-gray-700 rounded mb-7 bg-black text-white placeholder-gray-500 focus:border-orange-500 focus:outline-none"
           required
         />
@@ -118,7 +134,7 @@ export default function TelaCadastro() {
           type="submit"
           className="w-full bg-gradient-to-r from-red-600 via-orange-500 to-yellow-400 text-black py-3 rounded-lg font-bold hover:brightness-110 transition duration-300"
         >
-          Cadastrar
+          cadastrar
         </button>
 
         <p className="mt-6 text-center text-sm text-gray-400">
