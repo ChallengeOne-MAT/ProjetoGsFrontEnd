@@ -5,5 +5,7 @@ export default function callEmergency(type: 'police' | 'fire' | 'ambulance') {
     case 'fire': number = '193'; break;
     case 'ambulance': number = '192'; break;
   }
+if (typeof window !== 'undefined') {
   window.location.href = `tel:${number}`;
+}
 }

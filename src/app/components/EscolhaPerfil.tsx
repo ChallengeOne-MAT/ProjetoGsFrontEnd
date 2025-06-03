@@ -1,36 +1,35 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
-const EscolhaPerfil = () => {
+export default function EscolhaPerfil() {
   const [tipoUsuario, setTipoUsuario] = useState<"usuario" | "adm" | null>(null);
   const [senhaADM, setSenhaADM] = useState('');
   const [carregando, setCarregando] = useState(false);
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const senhaCorreta = 'admin123';
 
   useEffect(() => {
-    if (carregando && tipoUsuario) {
+    if (carregando && tipoUsuario === 'usuario') {
       const timer = setTimeout(() => {
         setCarregando(false);
-        if (tipoUsuario === 'usuario') {
-          navigate('/pages/cadastro');
-        }
+        router.push('/pages/cadastro'); // redireciona para o cadastro
       }, 2000);
+
       return () => clearTimeout(timer);
     }
-  }, [carregando, tipoUsuario, navigate]);
+  }, [carregando, tipoUsuario, router]);
 
   const handleTipoSelecionado = (tipo: "usuario" | "adm") => {
     setTipoUsuario(tipo);
-    setCarregando(true);
+    setCarregando(tipo === 'usuario');
   };
 
   const handleLoginADM = () => {
     if (senhaADM === senhaCorreta) {
-      navigate('/dashboard');
+      router.push('/dashboard'); // redireciona para o dashboard
     }
   };
 
@@ -103,7 +102,4 @@ const EscolhaPerfil = () => {
       </div>
     </div>
   );
-};
-
-export default EscolhaPerfil;
-  
+}

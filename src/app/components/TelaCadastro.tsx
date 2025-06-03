@@ -53,7 +53,7 @@ export default function TelaCadastro() {
     usuarios.push({ cpf, nome, email, senha });
     localStorage.setItem('usuarios', JSON.stringify(usuarios));
     alert('Cadastro realizado com sucesso! Agora faça login.');
-    router.push('/login');
+    router.push('/pages/login');
   };
 
   return (
@@ -123,7 +123,7 @@ export default function TelaCadastro() {
 
         <p className="mt-6 text-center text-sm text-gray-400">
           Já tem conta?{' '}
-          <a href="/login" className="text-orange-500 hover:underline">
+          <a href="/pages/login" className="text-orange-500 hover:underline">
             Faça login aqui
           </a>
         </p>

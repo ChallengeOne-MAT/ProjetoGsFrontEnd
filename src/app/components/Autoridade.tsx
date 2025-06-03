@@ -1,4 +1,5 @@
 'use client';
+
 import { useState } from 'react';
 
 const autoridades = [
@@ -21,13 +22,25 @@ export default function TelaEmergencia() {
 
   const autoridade = autoridades.find(a => a.id === selecionada);
 
+  // Função para validar o CEP (formato brasileiro: 5 dígitos + hífen + 3 dígitos ou só números)
+  const validarCEP = (cep: string) => {
+    const cepLimpo = cep.replace(/\D/g, '');
+    return cepLimpo.length === 8;
+  };
+
   const prosseguir = () => {
     if (!selecionada) {
-      alert('Selecione uma autoridade');
+      alert('Selecione uma autoridade para continuar.');
       return;
     }
 
     setCarregandoLocalizacao(true);
+
+    if (!navigator.geolocation) {
+      alert('Geolocalização não é suportada pelo seu navegador.');
+      setCarregandoLocalizacao(false);
+      return;
+    }
 
     navigator.geolocation.getCurrentPosition(
       (pos) => {
@@ -40,13 +53,14 @@ export default function TelaEmergencia() {
         console.error('Erro ao obter localização:', erro);
         alert('Não foi possível obter sua localização. Verifique as permissões do navegador.');
         setCarregandoLocalizacao(false);
-      }
+      },
+      { timeout: 10000 }
     );
   };
 
   const enviar = () => {
     if (!eventoSelecionado) {
-      alert('Escolha um evento');
+      alert('Escolha um evento para continuar.');
       return;
     }
 
@@ -54,6 +68,20 @@ export default function TelaEmergencia() {
       alert('Localização não disponível. Tente novamente.');
       return;
     }
+
+    if (cep && !validarCEP(cep)) {
+      alert('CEP inválido. Por favor, insira um CEP com 8 dígitos.');
+      return;
+    }
+
+    // Opção: validar tamanho máximo do texto da descrição
+    if (descricao.length > 500) {
+      alert('Descrição muito longa. Limite de 500 caracteres.');
+      return;
+    }
+
+    // Aqui você pode implementar um upload real da foto (opcional)
+    // Por ora, só salvamos o nome do arquivo
 
     const novaOcorrencia = {
       id_ocorrencia: Date.now(),
@@ -69,11 +97,16 @@ export default function TelaEmergencia() {
       dataHora: new Date().toLocaleString(),
     };
 
-    const existentes = JSON.parse(localStorage.getItem('ocorrencias') || '[]');
-    existentes.push(novaOcorrencia);
-    localStorage.setItem('ocorrencias', JSON.stringify(existentes));
-
-    alert('Ocorrência registrada com sucesso!');
+    try {
+      const existentes = JSON.parse(localStorage.getItem('ocorrencias') || '[]');
+      existentes.push(novaOcorrencia);
+      localStorage.setItem('ocorrencias', JSON.stringify(existentes));
+      alert('Ocorrência registrada com sucesso!');
+    } catch (error) {
+      console.error('Erro ao salvar ocorrência:', error);
+      alert('Erro ao salvar a ocorrência. Tente novamente.');
+      return;
+    }
 
     // Resetar estados
     setEtapa(1);
@@ -87,22 +120,36 @@ export default function TelaEmergencia() {
   };
 
   return (
-    <main className="p-6 max-w-md mx-auto bg-black rounded-lg shadow-lg mt-10 text-white font-sans">
+    <main
+      className="p-6 max-w-md mx-auto bg-black rounded-lg shadow-lg mt-10 text-white font-sans"
+      role="main"
+      aria-labelledby="titulo-pagina"
+    >
       {etapa === 1 && (
         <>
-          <h1 className="text-3xl font-extrabold mb-6 text-orange-500 text-center tracking-wide">
+          <h1
+            id="titulo-pagina"
+            className="text-3xl font-extrabold mb-6 text-orange-500 text-center tracking-wide"
+          >
             Escolha da Autoridade
           </h1>
-          <ul className="space-y-4">
+          <ul className="space-y-4" role="list" aria-label="Lista de autoridades">
             {autoridades.map((a) => (
               <li
                 key={a.id}
-                className={`p-5 border rounded-lg cursor-pointer transition-transform duration-300 hover:scale-105 shadow-md ${
-                  selecionada === a.id
-                    ? 'bg-red-700 border-red-500'
-                    : 'border-gray-700 hover:border-orange-500'
+                className={`p-5 border rounded-lg cursor-pointer transition-transform duration-300 hover:scale-105 shadow-md focus:outline-none focus:ring-2 focus:ring-orange-500 ${
+                  selecionada === a.id ? 'bg-red-700 border-red-500' : 'border-gray-700 hover:border-orange-500'
                 }`}
                 onClick={() => setSelecionada(a.id)}
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    setSelecionada(a.id);
+                  }
+                }}
+                aria-selected={selecionada === a.id}
+                role="option"
               >
                 <div className="flex justify-between items-center">
                   <span className="font-semibold text-yellow-400">{a.nome}</span>
@@ -111,12 +158,13 @@ export default function TelaEmergencia() {
                     onClick={(e) => e.stopPropagation()}
                     className="text-green-400 font-bold text-lg hover:text-green-500"
                     title={`Ligar para ${a.nome}`}
+                    aria-label={`Ligar para ${a.nome}`}
                   >
                     📞
                   </a>
                 </div>
                 {selecionada === a.id && (
-                  <div className="mt-3 text-sm text-gray-300">
+                  <div className="mt-3 text-sm text-gray-300" aria-live="polite">
                     <strong>Emergências:</strong> {a.eventos.join(', ')}
                   </div>
                 )}
@@ -127,11 +175,13 @@ export default function TelaEmergencia() {
           <button
             onClick={prosseguir}
             disabled={carregandoLocalizacao}
-            className={`w-full mt-8 py-3 rounded-lg font-bold transition duration-300 ${
+            className={`w-full mt-8 py-3 rounded-lg font-bold transition duration-300 focus:outline-none focus:ring-4 focus:ring-yellow-400 ${
               carregandoLocalizacao
                 ? 'bg-gray-500 text-white cursor-not-allowed'
                 : 'bg-gradient-to-r from-red-600 via-orange-500 to-yellow-400 text-black hover:brightness-110'
             }`}
+            aria-disabled={carregandoLocalizacao}
+            aria-busy={carregandoLocalizacao}
           >
             {carregandoLocalizacao ? 'Obtendo localização...' : 'Prosseguir ➜'}
           </button>
@@ -140,17 +190,29 @@ export default function TelaEmergencia() {
 
       {etapa === 2 && autoridade && (
         <>
-          <h2 className="text-2xl font-extrabold text-red-500 mb-5 text-center tracking-wide">
+          <h2
+            className="text-2xl font-extrabold text-red-500 mb-5 text-center tracking-wide"
+            tabIndex={-1}
+          >
             Situação - {autoridade.nome}
           </h2>
 
-          <label className="block font-semibold mb-2 text-orange-400">Escolha o evento:</label>
+          <label
+            htmlFor="evento-select"
+            className="block font-semibold mb-2 text-orange-400"
+          >
+            Escolha o evento:
+          </label>
           <select
+            id="evento-select"
             className="w-full p-3 border border-gray-700 rounded-lg mb-5 bg-black text-white focus:border-orange-500 focus:outline-none"
             value={eventoSelecionado}
             onChange={(e) => setEventoSelecionado(e.target.value)}
+            aria-required="true"
           >
-            <option value="">-- Selecione --</option>
+            <option value="" disabled>
+              -- Selecione --
+            </option>
             {autoridade.eventos.map((ev, idx) => (
               <option key={idx} value={ev}>
                 {ev}
@@ -158,42 +220,74 @@ export default function TelaEmergencia() {
             ))}
           </select>
 
-          <label className="block font-semibold mb-2 text-orange-400">Descrição (opcional):</label>
+          <label
+            htmlFor="descricao"
+            className="block font-semibold mb-2 text-orange-400"
+          >
+            Descrição (opcional):
+          </label>
           <textarea
+            id="descricao"
             className="w-full p-3 border border-gray-700 rounded-lg mb-5 bg-black text-white focus:border-orange-500 focus:outline-none"
             rows={4}
             value={descricao}
             onChange={(e) => setDescricao(e.target.value)}
-            placeholder="Descreva a situação..."
+            placeholder="Descreva a situação (máx. 500 caracteres)..."
+            maxLength={500}
+            aria-describedby="descricao-contador"
           ></textarea>
+          <div id="descricao-contador" className="text-right text-gray-400 mb-4 text-sm">
+            {descricao.length} / 500
+          </div>
 
-          <label className="block font-semibold mb-2 text-orange-400">Foto (opcional):</label>
+          <label
+            htmlFor="foto"
+            className="block font-semibold mb-2 text-orange-400"
+          >
+            Foto (opcional):
+          </label>
           <input
+            id="foto"
             type="file"
             accept="image/*"
             onChange={(e) => setFoto(e.target.files?.[0] || null)}
             className="mb-5 text-white"
+            aria-describedby="foto-ajuda"
           />
+          <div id="foto-ajuda" className="text-gray-400 text-sm mb-5">
+            Apenas imagens são aceitas. O upload será feito localmente.
+          </div>
 
-          <label className="block font-semibold mb-2 text-orange-400">CEP:</label>
+          <label
+            htmlFor="cep"
+            className="block font-semibold mb-2 text-orange-400"
+          >
+            CEP:
+          </label>
           <input
+            id="cep"
             type="text"
             value={cep}
             onChange={(e) => setCep(e.target.value)}
             className="w-full p-3 border border-gray-700 rounded-lg mb-6 bg-black text-white focus:border-orange-500 focus:outline-none"
             placeholder="Digite seu CEP"
+            maxLength={9} // permite formato com hífen
+            aria-describedby="cep-ajuda"
           />
+          <div id="cep-ajuda" className="text-gray-400 text-sm mb-6">
+            Formato esperado: 00000-000 ou 00000000
+          </div>
 
           <div className="flex justify-between gap-4">
             <button
               onClick={() => setEtapa(1)}
-              className="w-1/2 bg-gray-700 text-yellow-400 py-3 rounded-lg hover:bg-gray-600 transition"
+              className="w-1/2 bg-gray-700 text-yellow-400 py-3 rounded-lg hover:bg-gray-600 transition focus:outline-none focus:ring-4 focus:ring-yellow-400"
             >
               ◀ Voltar
             </button>
             <button
               onClick={enviar}
-              className="w-1/2 bg-gradient-to-r from-red-600 via-orange-500 to-yellow-400 text-black py-3 rounded-lg font-bold hover:brightness-110 transition"
+              className="w-1/2 bg-gradient-to-r from-red-600 via-orange-500 to-yellow-400 text-black py-3 rounded-lg font-bold hover:brightness-110 transition focus:outline-none focus:ring-4 focus:ring-yellow-400"
             >
               Enviar ✅
             </button>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
@@ -54,7 +54,13 @@ export default function Home() {
   const [sosStatus, setSosStatus] = useState(false);
   const router = useRouter();
 
+  // Função que só roda no cliente para disparar notificações
   const dispararNotificacoes = () => {
+    if (typeof window === 'undefined' || typeof Notification === 'undefined') {
+      // Estamos no servidor, não executa nada
+      return;
+    }
+
     if (!("Notification" in window)) {
       alert("Seu navegador não suporta notificações.");
       return;
