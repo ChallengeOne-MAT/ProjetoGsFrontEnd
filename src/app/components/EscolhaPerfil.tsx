@@ -106,3 +106,4 @@ const EscolhaPerfil = () => {
 };
 
 export default EscolhaPerfil;
+  
