@@ -124,7 +124,7 @@ export default function TelaCadastro() {
         <p className="mt-6 text-center text-sm text-gray-400">
           Já tem conta?{' '}
           <a href="/pages/login" className="text-orange-500 hover:underline">
-            Faça login aqui!
+            Faca login aqui!
           </a>
         </p>
       </form>
