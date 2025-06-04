@@ -45,8 +45,6 @@ export default function TelaEmergencia() {
       (pos) => {
         setLatitude(pos.coords.latitude);
         setLongitude(pos.coords.longitude);
-        console.log('Latitude:', pos.coords.latitude);
-        console.log('Longitude:', pos.coords.longitude);
         setCarregandoLocalizacao(false);
         setEtapa(2);
       },
@@ -59,6 +57,44 @@ export default function TelaEmergencia() {
     );
   };
 
+  // Função para salvar ocorrência no localStorage
+  const salvarOcorrencia = (fotoBase64: string | null) => {
+    const novaOcorrencia = {
+      id_ocorrencia: Date.now(),
+      id_autoridade: autoridade?.id,
+      autoridade: autoridade?.nome,
+      tipo: eventoSelecionado,
+      descricao,
+      foto: fotoBase64, // aqui armazenamos o base64 ou null
+      latitude,
+      longitude,
+      cep,
+      status: 'pendente',
+      dataHora: new Date().toLocaleString(),
+    };
+
+    try {
+      const existentes = JSON.parse(localStorage.getItem('ocorrencias') || '[]');
+      existentes.push(novaOcorrencia);
+      localStorage.setItem('ocorrencias', JSON.stringify(existentes));
+      alert('Ocorrência registrada com sucesso!');
+
+      // Resetar os estados para o início
+      setEtapa(1);
+      setSelecionada(null);
+      setEventoSelecionado('');
+      setDescricao('');
+      setFoto(null);
+      setLatitude(null);
+      setLongitude(null);
+      setCep('');
+    } catch (error) {
+      console.error('Erro ao salvar ocorrência:', error);
+      alert('Erro ao salvar a ocorrência. Tente novamente.');
+    }
+  };
+
+  // Função enviar agora faz a conversão para base64
   const enviar = () => {
     if (!eventoSelecionado) {
       alert('Escolha um evento para continuar.');
@@ -80,39 +116,16 @@ export default function TelaEmergencia() {
       return;
     }
 
-    const novaOcorrencia = {
-      id_ocorrencia: Date.now(),
-      id_autoridade: autoridade?.id,
-      autoridade: autoridade?.nome,
-      tipo: eventoSelecionado,
-      descricao,
-      foto: foto?.name || null,
-      latitude,
-      longitude,
-      cep,
-      status: 'pendente',
-      dataHora: new Date().toLocaleString(),
-    };
-
-    try {
-      const existentes = JSON.parse(localStorage.getItem('ocorrencias') || '[]');
-      existentes.push(novaOcorrencia);
-      localStorage.setItem('ocorrencias', JSON.stringify(existentes));
-      alert('Ocorrência registrada com sucesso!');
-    } catch (error) {
-      console.error('Erro ao salvar ocorrência:', error);
-      alert('Erro ao salvar a ocorrência. Tente novamente.');
-      return;
+    if (foto) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const fotoBase64 = reader.result as string; // base64 da imagem
+        salvarOcorrencia(fotoBase64);
+      };
+      reader.readAsDataURL(foto);
+    } else {
+      salvarOcorrencia(null);
     }
-
-    setEtapa(1);
-    setSelecionada(null);
-    setEventoSelecionado('');
-    setDescricao('');
-    setFoto(null);
-    setLatitude(null);
-    setLongitude(null);
-    setCep('');
   };
 
   return (
@@ -286,7 +299,6 @@ export default function TelaEmergencia() {
             </button>
             <button
               onClick={enviar}
-              
               className="w-1/2 bg-gradient-to-r from-red-600 via-orange-500 to-yellow-400 text-black py-3 rounded-lg font-bold hover:brightness-110 transition focus:outline-none focus:ring-4 focus:ring-yellow-400"
             >
               Enviar ✅
