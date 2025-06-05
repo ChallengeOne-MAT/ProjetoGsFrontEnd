@@ -2,12 +2,12 @@
 
 import { useState } from 'react';
 
-const autoridades = [
-  { id: 1, nome: 'Bombeiros', telefone: '193', eventos: ['Incêndio', 'Resgate', 'Alagamento'] },
-  { id: 2, nome: 'Polícia', telefone: '190', eventos: ['Assalto', 'Violência', 'Perturbação'] },
-  { id: 3, nome: 'Controle de Zoonoses', telefone: '0800-000-000', eventos: ['Animal perdido', 'Animal agressivo'] },
-  { id: 4, nome: 'SAMU', telefone: '192', eventos: ['Desmaio', 'Acidente', 'Dor intensa'] },
-];
+  const autoridades = [
+    { id: 1, nome: 'Bombeiros', telefone: '193', eventos: ['Incêndio', 'Resgate', 'Alagamento'] },
+    { id: 2, nome: 'Polícia', telefone: '190', eventos: ['Assalto', 'Violência', 'Perturbação'] },
+    { id: 3, nome: 'Controle de Zoonoses', telefone: '0800-000-000', eventos: ['Animal perdido', 'Animal agressivo'] },
+    { id: 4, nome: 'SAMU', telefone: '192', eventos: ['Desmaio', 'Acidente', 'Dor intensa'] },
+  ];
 
 export default function TelaEmergencia() {
   const [etapa, setEtapa] = useState(1);
@@ -57,7 +57,6 @@ export default function TelaEmergencia() {
     );
   };
 
-  // Função para salvar ocorrência no localStorage
   const salvarOcorrencia = (fotoBase64: string | null) => {
     const novaOcorrencia = {
       id_ocorrencia: Date.now(),
@@ -65,7 +64,7 @@ export default function TelaEmergencia() {
       autoridade: autoridade?.nome,
       tipo: eventoSelecionado,
       descricao,
-      foto: fotoBase64, // aqui armazenamos o base64 ou null
+      foto: fotoBase64, 
       latitude,
       longitude,
       cep,
@@ -79,7 +78,6 @@ export default function TelaEmergencia() {
       localStorage.setItem('ocorrencias', JSON.stringify(existentes));
       alert('Ocorrência registrada com sucesso!');
 
-      // Resetar os estados para o início
       setEtapa(1);
       setSelecionada(null);
       setEventoSelecionado('');
@@ -94,7 +92,6 @@ export default function TelaEmergencia() {
     }
   };
 
-  // Função enviar agora faz a conversão para base64
   const enviar = () => {
     if (!eventoSelecionado) {
       alert('Escolha um evento para continuar.');

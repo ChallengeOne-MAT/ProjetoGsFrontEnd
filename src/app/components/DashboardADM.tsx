@@ -1,7 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
-import Image from 'next/image';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -14,7 +13,6 @@ import {
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import 'leaflet/dist/leaflet.css';
-
 import { useMap } from 'react-leaflet';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
@@ -44,19 +42,10 @@ interface Ocorrencia {
 }
 
 const autoridadeColors: Record<string, string> = {
-  Bombeiros: '#dc2626',
-  Suma: '#2563eb',
-  Polícia: '#059669',
-  Guarda: '#d97706',
-  DefesaCivil: '#7c3aed',
-};
-
-const tipoColors: Record<string, string> = {
-  Acidente: '#f97316',
-  Incêndio: '#dc2626',
-  Roubo: '#2563eb',
-  Desastre: '#059669',
-  Outra: '#6b7280',
+  Bombeiros: '#dc2626', // vermelho
+  Polícia: '#2563eb',   // azul
+  Samu: '#facc15',      // amarelo, conforme pedido
+  Zoonoses: '#facc15',  // amarelo
 };
 
 export default function DashboardADM() {
@@ -79,18 +68,18 @@ export default function DashboardADM() {
     return tipoOk && statusOk;
   });
 
-  const agrupados: Record<string, number> = {};
+  const agrupadosPorAutoridade: Record<string, number> = {};
   ocorrenciasFiltradas.forEach(o => {
-    agrupados[o.tipo] = (agrupados[o.tipo] || 0) + 1;
+    agrupadosPorAutoridade[o.autoridade] = (agrupadosPorAutoridade[o.autoridade] || 0) + 1;
   });
 
   const data = {
-    labels: Object.keys(agrupados),
+    labels: Object.keys(agrupadosPorAutoridade),
     datasets: [
       {
         label: 'Ocorrências',
-        data: Object.values(agrupados),
-        backgroundColor: Object.keys(agrupados).map(tipo => tipoColors[tipo] || '#facc15'),
+        data: Object.values(agrupadosPorAutoridade),
+        backgroundColor: Object.keys(agrupadosPorAutoridade).map(autoridade => autoridadeColors[autoridade] || '#facc15'),
         borderColor: '#e5e7eb',
         borderWidth: 1,
       },
@@ -109,7 +98,7 @@ export default function DashboardADM() {
       },
       title: {
         display: true,
-        text: 'Gráfico de Ocorrências',
+        text: 'Gráfico de Ocorrências por Autoridade',
         color: '#facc15',
       },
     },
@@ -146,6 +135,7 @@ export default function DashboardADM() {
     }, 600);
     setTimeout(() => setPopupMsg(null), 3000);
   };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-black to-gray-900 text-white p-4 md:p-6 lg:p-10 font-sans">
       <h1 className="text-4xl font-bold text-center mb-10 text-yellow-400">Painel do Administrador</h1>
@@ -191,98 +181,94 @@ export default function DashboardADM() {
           </select>
         </div>
       </div>
+
       <h2 className="text-2xl font-semibold mb-4 text-yellow-400">Relatório Detalhado</h2>
 
       <div className="overflow-auto text-sm rounded-lg shadow border border-gray-700">
-        <div className="hidden md:block overflow-auto text-sm rounded-lg shadow border border-gray-700">
-          <table className="w-full table-auto text-white bg-transparent rounded border border-gray-700">
-            <thead className="bg-gray-900 text-yellow-400">
-              <tr>
-                {['Data/Hora', 'Autoridade', 'Tipo', 'Descrição', 'CEP', 'Localização', 'Foto', 'Status', 'Ação'].map(
-                  (col, i) => (
-                    <th key={i} className="border border-gray-700 p-2 text-sm font-semibold">
-                      {col}
-                    </th>
-                  )
-                )}
-              </tr>
-            </thead>
-            <tbody>
-              {ocorrenciasPaginadas.map((o, idx) => {
-                const indexGlobal = ocorrencias.findIndex((oc) => oc.dataHora === o.dataHora);
-                const isResolving = resolvendoId === o.dataHora;
-                return (
-                  <tr
-                    key={idx}
-                    style={{
-                      borderColor: autoridadeColors[o.autoridade] || '#374151',
-                      borderStyle: 'solid',
-                      borderWidth: '1px',
-                      transition: 'transform 0.5s ease, opacity 0.5s ease',
-                      transform: isResolving ? 'translateX(100%)' : 'translateX(0)',
-                      opacity: isResolving ? 0 : 1,
-                    }}
-                    className="text-white hover:brightness-90"
-                  >
-                    <td className="border border-gray-700 p-2">{o.dataHora}</td>
-                    <td className="border border-gray-700 p-2 flex items-center gap-2">
-                      <span>{o.autoridade}</span>
-                      {o.foto && (o.foto.startsWith('http') || o.foto.startsWith('data:image')) && (
-                        <Image src={o.foto} alt="Foto Autoridade" width={30} height={30} className="rounded-full object-cover" />
-                      )}
-                    </td>
-                    <td
-                      className="border border-gray-700 p-2"
-                      style={{ backgroundColor: 'transparent', color: '#000' }}
+        <table className="w-full table-auto text-white bg-transparent rounded border border-gray-700 hidden md:table">
+          <thead className="bg-gray-900 text-yellow-400">
+            <tr>
+              {['Data/Hora', 'Autoridade', 'Tipo', 'Descrição', 'CEP', 'Localização', 'Foto', 'Status', 'Ação'].map(
+                (col, i) => (
+                  <th key={i} className="border border-gray-700 p-2 text-sm font-semibold">
+                    {col}
+                  </th>
+                )
+              )}
+            </tr>
+          </thead>
+          <tbody>
+            {ocorrenciasPaginadas.map((o, idx) => {
+              const indexGlobal = ocorrencias.findIndex((oc) => oc.dataHora === o.dataHora);
+              const isResolving = resolvendoId === o.dataHora;
+              return (
+                <tr
+                  key={idx}
+                  style={{
+                    borderColor: autoridadeColors[o.autoridade] || '#374151',
+                    borderStyle: 'solid',
+                    borderWidth: '1px',
+                    transition: 'transform 0.5s ease, opacity 0.5s ease',
+                    transform: isResolving ? 'translateX(100%)' : 'translateX(0)',
+                    opacity: isResolving ? 0 : 1,
+                  }}
+                  className="text-white hover:brightness-90"
+                >
+                  <td className="border border-gray-700 p-2">{o.dataHora}</td>
+                  <td className="border border-gray-700 p-2 flex items-center gap-1">
+                    <span
+                      className="inline-block w-3 h-3 rounded-full"
+                      style={{ backgroundColor: autoridadeColors[o.autoridade] || '#facc15' }}
+                    />
+                    {o.autoridade}
+                  </td>
+                  <td className="border border-gray-700 p-2">{o.tipo}</td>
+                  <td className="border border-gray-700 p-2">{o.descricao}</td>
+                  <td className="border border-gray-700 p-2">{o.cep}</td>
+                  <td className="border border-gray-700 p-2">
+                    <a
+                      href={`https://www.google.com/maps/search/?api=1&query=${o.latitude},${o.longitude}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-yellow-400 hover:underline"
+                      aria-label={`Abrir localização de ${o.tipo} no Google Maps`}
                     >
-                      {o.tipo}
-                    </td>
-                    <td className="border border-gray-700 p-2">{o.descricao}</td>
-                    <td className="border border-gray-700 p-2">{o.cep}</td>
-                    <td className="border border-gray-700 p-2">
+                      Ver Mapa
+                    </a>
+                  </td>
+                  <td className="border border-gray-700 p-2">
+                    {o.foto ? (
                       <a
-                        className="text-blue-400 underline"
-                        href={`https://www.google.com/maps?q=${o.latitude},${o.longitude}`}
+                        href={o.foto}
                         target="_blank"
                         rel="noopener noreferrer"
+                        className="text-yellow-400 hover:underline"
+                        aria-label={`Abrir foto da ocorrência de ${o.tipo}`}
                       >
-                        Ver no Mapa
+                        Foto
                       </a>
-                    </td>
-                    <td className="border border-gray-700 p-2">
-                      {o.foto && (o.foto.startsWith('http') || o.foto.startsWith('data:image')) ? (
-                        <a
-                          href={o.foto}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="underline text-blue-400 hover:text-blue-600"
-                        >
-                          Ver Foto
-                        </a>
-                      ) : (
-                        'Sem foto'
-                      )}
-                    </td>
-                    <td className="border border-gray-700 p-2">{o.status}</td>
-                    <td className="border border-gray-700 p-2 text-center">
-                      {o.status !== 'Resolvida' && (
-                        <button
-                          disabled={!!resolvendoId}
-                          onClick={() => marcarComoResolvida(indexGlobal)}
-                          className="bg-orange-500 text-white px-3 py-1 rounded hover:bg-orange-600 disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                          Resolver
-                        </button>
-                      )}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+                    ) : (
+                      '-'
+                    )}
+                  </td>
+                  <td className="border border-gray-700 p-2">{o.status}</td>
+                  <td className="border border-gray-700 p-2 text-center">
+                    <button
+                      onClick={() => marcarComoResolvida(indexGlobal)}
+                      disabled={o.status === 'Resolvida' || isResolving}
+                      className={`bg-yellow-400 text-black font-semibold rounded px-4 py-2 text-lg hover:bg-yellow-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors`}
+                      aria-label={`Marcar ocorrência de ${o.tipo} como resolvida`}
+                    >
+                      Marcar Resolvida
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
 
-        <div className="md:hidden space-y-4">
+        <div className="md:hidden flex flex-col gap-8">
           {ocorrenciasPaginadas.map((o, idx) => {
             const indexGlobal = ocorrencias.findIndex((oc) => oc.dataHora === o.dataHora);
             const isResolving = resolvendoId === o.dataHora;
@@ -297,86 +283,109 @@ export default function DashboardADM() {
                   transform: isResolving ? 'translateX(100%)' : 'translateX(0)',
                   opacity: isResolving ? 0 : 1,
                 }}
-                className="p-4 rounded shadow border text-white"
+                className="p-3 rounded bg-gray-900 shadow"
               >
-                <p>
-                  <strong className="text-yellow-400">Data/Hora:</strong> {o.dataHora}
+                <p className="mb-1">
+                  <strong>Data/Hora:</strong> {o.dataHora}
                 </p>
-                <p className="flex items-center gap-2">
-                  <strong className="text-yellow-400">Autoridade:</strong> {o.autoridade}
-                  {o.foto && (o.foto.startsWith('http') || o.foto.startsWith('data:image')) && (
-                    <Image src={o.foto} alt="Foto Autoridade" width={30} height={30} className="rounded-full object-cover" />
-                  )}
+                <p className="mb-1 flex items-center gap-1">
+                  <strong>Autoridade:</strong>{' '}
+                  <span
+                    className="inline-block w-3 h-3 rounded-full"
+                    style={{ backgroundColor: autoridadeColors[o.autoridade] || '#facc15' }}
+                  />
+                  {o.autoridade}
                 </p>
-                <p style={{ backgroundColor: 'transparent', color: '#000', padding: '2px 6px', borderRadius: '4px' }}>
-                  <strong className="text-yellow-400">Tipo:</strong> {o.tipo}
+                <p className="mb-1">
+                  <strong>Tipo:</strong> {o.tipo}
                 </p>
-                <p>
-                  <strong className="text-yellow-400">Descrição:</strong> {o.descricao}
+                <p className="mb-1">
+                  <strong>Descrição:</strong> {o.descricao}
                 </p>
-                <p>
-                  <strong className="text-yellow-400">CEP:</strong> {o.cep}
+                <p className="mb-1">
+                  <strong>CEP:</strong> {o.cep}
                 </p>
-                <p>
-                  <strong className="text-yellow-400">Localização:</strong>{' '}
+                <p className="mb-1">
+                  <strong>Localização:</strong>{' '}
                   <a
-                    className="text-blue-400 underline"
-                    href={`https://www.google.com/maps?q=${o.latitude},${o.longitude}`}
+                    href={`https://www.google.com/maps/search/?api=1&query=${o.latitude},${o.longitude}`}
                     target="_blank"
                     rel="noopener noreferrer"
+                    className="text-yellow-400 hover:underline"
+                    aria-label={`Abrir localização de ${o.tipo} no Google Maps`}
                   >
-                    Ver no Mapa
+                    Ver Mapa
                   </a>
                 </p>
-                <p>
-                  <strong className="text-yellow-400">Foto:</strong>{' '}
-                  {o.foto && (o.foto.startsWith('http') || o.foto.startsWith('data:image')) ? (
+                <p className="mb-1">
+                  <strong>Foto:</strong>{' '}
+                  {o.foto ? (
                     <a
                       href={o.foto}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="underline text-blue-400 hover:text-blue-600"
+                      className="text-yellow-400 hover:underline"
+                      aria-label={`Abrir foto da ocorrência de ${o.tipo}`}
                     >
-                      Ver Foto
+                      Foto
                     </a>
                   ) : (
-                    'Sem foto'
+                    '-'
                   )}
                 </p>
-                <p>
-                  <strong className="text-yellow-400">Status:</strong> {o.status}
+                <p className="mb-3">
+                  <strong>Status:</strong> {o.status}
                 </p>
-                {o.status !== 'Resolvida' && (
-                  <button
-                    disabled={!!resolvendoId}
-                    onClick={() => marcarComoResolvida(indexGlobal)}
-                    className="mt-2 bg-orange-500 text-white px-3 py-1 rounded hover:bg-orange-600 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    Resolver
-                  </button>
-                )}
+                <button
+                  onClick={() => marcarComoResolvida(indexGlobal)}
+                  disabled={o.status === 'Resolvida' || isResolving}
+                  className={`bg-yellow-400 text-black font-semibold rounded px-4 py-2 text-lg hover:bg-yellow-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors mt-4 w-full`}
+                  aria-label={`Marcar ocorrência de ${o.tipo} como resolvida`}
+                >
+                  Marcar Resolvida
+                </button>
               </div>
             );
           })}
         </div>
       </div>
 
-      <div className="mt-6 flex justify-center flex-wrap gap-2">
-        {Array.from({ length: totalPaginas }, (_, i) => i + 1).map((num) => (
+      <div className="mt-6 flex justify-center gap-3 text-yellow-400">
+        <button
+          onClick={() => setPagina(p => Math.max(1, p - 1))}
+          disabled={pagina === 1}
+          aria-label="Página anterior"
+          className="font-bold text-lg disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+          &lt;
+        </button>
+        {[...Array(totalPaginas)].map((_, i) => (
           <button
-            key={num}
-            onClick={() => setPagina(num)}
+            key={i}
+            onClick={() => setPagina(i + 1)}
             className={`px-3 py-1 rounded ${
-              num === pagina ? 'bg-yellow-400 text-black' : 'bg-gray-700 hover:bg-yellow-400 hover:text-black'
+              pagina === i + 1 ? 'bg-yellow-400 text-black font-bold' : 'hover:bg-yellow-600'
             }`}
+            aria-label={`Ir para página ${i + 1}`}
           >
-            {num}
+            {i + 1}
           </button>
         ))}
+        <button
+          onClick={() => setPagina(p => Math.min(totalPaginas, p + 1))}
+          disabled={pagina === totalPaginas}
+          aria-label="Próxima página"
+          className="font-bold text-lg disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+          &gt;
+        </button>
       </div>
 
       {popupMsg && (
-        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 bg-green-600 text-white px-6 py-3 rounded shadow-lg animate-fadeInOut">
+        <div
+          className="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-yellow-400 text-black px-6 py-3 rounded shadow-lg text-center font-bold animate-fade-in-out"
+          role="alert"
+        >
           {popupMsg}
         </div>
       )}
