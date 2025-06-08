@@ -1,11 +1,22 @@
 'use client'
 import { FaMapMarkedAlt, FaUsers, FaComments, FaHandsHelping, FaPhoneAlt } from 'react-icons/fa'
 import { MdSecurity, MdReport } from 'react-icons/md'
+import Image from 'next/image';
+import BotaoVoltar from '@/app/components/BotaoVoltar';
 
 export default function ButtonSosPage() {
   return (
     <main className="min-h-screen bg-black text-white px-6 py-10 flex flex-col items-center justify-center space-y-10">
       <section className="bg-gray-900 bg-opacity-90 backdrop-blur-md border border-yellow-500 shadow-2xl rounded-3xl p-8 max-w-3xl w-full animate-fade-in-up">
+        <div className="flex mb-[5%] justify-center">
+  <Image
+    src="/icons/imgicon4.jpeg"
+    alt="Logo"
+    width={100}
+    height={100}
+  />
+</div>
+
         <h1 className="text-4xl md:text-5xl font-extrabold text-yellow-400 text-center mb-6 tracking-wide">
           🚨 SafeCall: Sistema de Resposta Rápida
         </h1>
@@ -70,12 +81,9 @@ export default function ButtonSosPage() {
         </div>
       </section>
 
-      <footer className="text-sm text-gray-500 text-center mt-6">
-        <p>Desenvolvido por:</p>
-        <p>Lucas Almeida de Siqueira - RM XXXXXXX</p>
-        <p>Sulamita Viégas dos Santos - RM 561089</p>
-        <p>Matteus Viégas dos Santos - RM 561090</p>
-      </footer>
+        <div className="mt-20 w-full flex justify-center">
+              <BotaoVoltar />
+            </div>
     </main>
   )
 }

@@ -26,7 +26,7 @@ Número de celular
 
 Autoridade (único cadastro para todos):
 
-CNPJ (SAFECALL)
+cpf (administrador da SAFECALL)
 
 Senha
 
@@ -54,14 +54,6 @@ SAMU
 
 Controle de Zoonoses
 
-Defesa Civil (✅ sugestão extra)
-
-Guarda Municipal
-
-Equipes de Resgate Voluntário
-
-Força Nacional (em casos extremos)
-
 Ações:
 
 Selecionar autoridade e prosseguir.
@@ -84,14 +76,6 @@ Escrever descrição da ocorrência (opcional).
 
 Enviar relatório para a autoridade.
 
-5. Chat com a Autoridade
-Exibe o status do atendimento:
-
-Aguardando
-
-Em atendimento
-
-Encerrado
 
 Interface de chat simples:
 
@@ -101,66 +85,22 @@ Uso contínuo até a finalização do atendimento.
 
 Autoridade pode solicitar mais detalhes ao chegar no local.
 
-🛠 Roadmap do Projeto
-📌 Fase 1: Planejamento e Protótipo
-Criação de wireframes (Figma)
-
-Definição de cores, tipografia e layout
-
-🧱 Fase 2: Estrutura Inicial
-Tela de cadastro
-
-Tela SOS com botão funcional
-
-Lista de autoridades
-
-🔧 Fase 3: Funcionalidades Avançadas
-Compartilhamento de localização
-
-Filtro inteligente por tipo de desastre
-
-Upload de imagem e descrição
-
-Integração com chat
 
 🧰 Tecnologias Utilizadas
 
 Google Maps API (localização em tempo real)
 
 
-📁 Estrutura de Pastas (Exemplo)
-bash
-Copiar
-Editar
-/src
-  /screens
-    CadastroUsuario.tsx
-    CadastroAutoridade.tsx
-    TelaSOStsx
-    EscolhaAutoridade.tsx
-    FiltragemSituacao.tsx
-    Chat.tsx
-  /components
-    BotaoSOS.tsx
-    ListaAutoridades.tsx
-  /services
-    auth.tsx
-    api.tsx
-  /assets
-    icons/
-    images/
-🧪 Como Rodar o Projeto
-bash
-Copiar
-Editar
+
 git clone https://github.com/seuusuario/SafeCall-App.git
 cd SafeCall-App
 npm install
-npm run android
-Acesse o app em um dispositivo Android com emulador ou USB debugging ativado.
+nmp run dev
+Acesse o app em um dispositivo mobile ou outros tipos de telas.
 
 🎥 Demonstração
-Clique aqui para ver o vídeo de apresentação do SafeCall
+Clique aqui para ver o vídeo de apresentação do SafeCall:
+hhtps:
 
 🌍 Exemplos de Uso
 Usuário presencia um incêndio → Pressiona SOS → Escolhe "Bombeiros" → Tira foto do incêndio → Escreve "fogo em casa ao lado" → Envia → Chat aberto para suporte contínuo.
@@ -169,17 +109,14 @@ Enchente repentina no bairro → Escolhe "Defesa Civil" → Compartilha localiza
 
 🔐 Principais APIs do Projeto
 📤 Envio de Relatório
-css
+
 Copiar
 Editar
-POST /api/emergencia/relatorio
+POST /api/emergencia/usuario
 Payload:
 {
   cpfUsuario: "123.456.789-00",
-  autoridade: "Bombeiros",
-  descricao: "Incêndio em galpão",
-  localizacao: { lat: -23.5, lng: -46.6 },
-  imagem: "url_da_imagem"
+  senha: "senhaJoao456",
+  telefone: "11915353752"
 }
-💬 Mensagens em Tempo Real (WebSocket ou Firebase)
 

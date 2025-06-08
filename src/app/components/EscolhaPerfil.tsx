@@ -15,7 +15,7 @@ export default function EscolhaPerfil() {
     if (carregando && tipoUsuario === 'usuario') {
       const timer = setTimeout(() => {
         setCarregando(false);
-        router.push('/pages/cadastro'); // redireciona para o cadastro
+        router.push('/pages/cadastro'); 
       }, 2000);
 
       return () => clearTimeout(timer);

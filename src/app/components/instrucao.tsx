@@ -10,6 +10,9 @@ import {
   ArrowTrendingUpIcon,
 } from '@heroicons/react/24/outline';
 import { useState } from 'react';
+import BotaoVoltar from './BotaoVoltar';
+import Image from 'next/image';
+
 
 const disasters = [
   {
@@ -77,11 +80,17 @@ export default function Instrucao() {
 
   return (
     <div className="bg-black py-16 px-4 sm:px-8 md:px-16 min-h-screen flex flex-col items-center relative z-0">
-      <h2 className="text-4xl sm:text-5xl font-extrabold text-orange-500 mb-14 drop-shadow-lg tracking-wide text-center max-w-4xl relative z-10">
+          <Image
+      src="/icons/imgicon1.jpeg"
+      alt="Logo"
+      width={100}
+      height={100}
+    />
+      <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-orange-500 mb-20 drop-shadow-lg tracking-wide text-center max-w-4xl">
         Instruções em Caso de Desastres Naturais
       </h2>
 
-      <div className="w-full max-w-7xl flex flex-col-reverse lg:flex-col lg:grid lg:grid-cols-1 relative gap-y-28 sm:gap-y-32">
+      <div className="w-full max-w-7xl flex flex-col gap-y-20">
         {disasters.map((item, index) => (
           <motion.div
             key={index}
@@ -102,8 +111,6 @@ export default function Instrucao() {
             }}
             style={{
               filter: `drop-shadow(0 0 ${index * 4 + 8}px rgba(255,140,0,0.5))`,
-              marginTop: index === 0 ? 0 : `-${index * 14}px`,
-              zIndex: activeIndex === index ? 1000 : 1000 - index,
               transition: 'all 0.3s ease',
             }}
           >
@@ -131,6 +138,10 @@ export default function Instrucao() {
             </AnimatePresence>
           </motion.div>
         ))}
+      </div>
+
+      <div className="mt-20 w-full flex justify-center">
+        <BotaoVoltar />
       </div>
     </div>
   );

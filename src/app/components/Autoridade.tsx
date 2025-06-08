@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import BotaoVoltar from './BotaoVoltar';
+import SosEnergency from './SosEnergency';
 
   const autoridades = [
     { id: 1, nome: 'Bombeiros', telefone: '193', eventos: ['Incêndio', 'Resgate', 'Alagamento'] },
@@ -116,7 +118,7 @@ export default function TelaEmergencia() {
     if (foto) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        const fotoBase64 = reader.result as string; // base64 da imagem
+        const fotoBase64 = reader.result as string; 
         salvarOcorrencia(fotoBase64);
       };
       reader.readAsDataURL(foto);
@@ -179,7 +181,9 @@ export default function TelaEmergencia() {
               </li>
             ))}
           </ul>
-
+          <BotaoVoltar texto=" ◀ Voltar" className="w-1/2 bg-gray-700 text-yellow-400 py-3 rounded-lg hover:bg-gray-600 transition focus:outline-none focus:ring-4 focus:ring-yellow-4 " />
+        <SosEnergency/>
+            
           <button
             onClick={prosseguir}
             disabled={carregandoLocalizacao}
@@ -247,6 +251,7 @@ export default function TelaEmergencia() {
           <div id="descricao-contador" className="text-right text-gray-400 mb-4 text-sm">
             {descricao.length} / 500
           </div>
+        <SosEnergency/>
 
           <label
             htmlFor="foto"
@@ -288,12 +293,8 @@ export default function TelaEmergencia() {
           </div>
 
           <div className="flex justify-between gap-4">
-            <button
-              onClick={() => setEtapa(1)}
-              className="w-1/2 bg-gray-700 text-yellow-400 py-3 rounded-lg hover:bg-gray-600 transition focus:outline-none focus:ring-4 focus:ring-yellow-400"
-            >
-              ◀ Voltar
-            </button>
+                     <BotaoVoltar texto=" ◀ Voltar" className="w-1/2 bg-gray-700 text-yellow-400 py-3 rounded-lg hover:bg-gray-600 transition focus:outline-none focus:ring-4 focus:ring-yellow-4 " />
+
             <button
               onClick={enviar}
               className="w-1/2 bg-gradient-to-r from-red-600 via-orange-500 to-yellow-400 text-black py-3 rounded-lg font-bold hover:brightness-110 transition focus:outline-none focus:ring-4 focus:ring-yellow-400"
@@ -301,6 +302,7 @@ export default function TelaEmergencia() {
               Enviar ✅
             </button>
           </div>
+
         </>
       )}
     </main>

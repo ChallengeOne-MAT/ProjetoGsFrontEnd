@@ -42,10 +42,10 @@ interface Ocorrencia {
 }
 
 const autoridadeColors: Record<string, string> = {
-  Bombeiros: '#dc2626', // vermelho
-  Polícia: '#2563eb',   // azul
-  Samu: '#facc15',      // amarelo, conforme pedido
-  Zoonoses: '#facc15',  // amarelo
+  Bombeiros: '#dc2626', 
+  Polícia: '#2563eb',   
+  Samu: '#facc15',      
+  Zoonoses: '#facc15',  
 };
 
 export default function DashboardADM() {

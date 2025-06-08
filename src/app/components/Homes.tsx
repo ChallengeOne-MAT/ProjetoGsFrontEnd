@@ -5,6 +5,8 @@ import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
+import BotaoVoltar from './BotaoVoltar';
+import Image from 'next/image';
 
 type Contato = {
   id: number;
@@ -13,21 +15,15 @@ type Contato = {
 };
 
 const sections = [
-  {
-    id: 'explicacoes',
-    title: '📚 Como agir em desastres naturais',
-    description:
-      'Conheça atitudes rápidas e inteligentes para proteger vidas durante enchentes, terremotos e outros eventos críticos. 🧭🚨',
-    link: '/pages/instrucao',
-  },
-  {
-    id: 'chat',
-    title: '💬 Chat de Emergência 24h',
-    description:
-      'Converse em tempo real com nossos especialistas e obtenha suporte imediato em qualquer situação. 👨‍🚒📲',
-    link: '/chat',
-  },
-  {
+ {
+  id: 'explicacoes',
+  title: '📚 Como agir em desastres naturais',
+  description:
+    'Conheça atitudes rápidas e inteligentes para proteger vidas durante enchentes, terremotos e outros eventos críticos. 🧭🚨',
+  link: '/pages/instrucao',
+  image: '/icons/imgicon1.jpeg' 
+},
+ {
     id: 'sos-info',
     title: '🆘 Sobre o Botão SOS',
     description:
@@ -39,14 +35,14 @@ const sections = [
     title: '📜 Histórico de Ações',
     description:
       'Visualize cada passo tomado em emergências anteriores com registros claros e organizados. 🗂️📅',
-    link: '/historico',
+    link: '/pages/HistoricoAcoes',
   },
   {
     id: 'dashboard',
     title: '📊 Painel de Ocorrências',
     description:
       'Acompanhe estatísticas vitais para análise e prevenção de futuros incidentes. 📈🧠',
-    link: '/dashboard',
+    link: '/pages/PainelOcorrencia',
   },
 ];
 
@@ -230,6 +226,7 @@ export default function Home() {
               whileHover={{ scale: 1.01 }}
             >
               <div className="max-w-lg text-center sm:text-left font-light tracking-wide w-full">
+        
                 <h3 className="text-2xl sm:text-3xl font-bold text-orange-300 mb-4 drop-shadow-md tracking-wide">
                   {sec.title}
                 </h3>
@@ -259,7 +256,7 @@ export default function Home() {
 
       <motion.section
         id="integrantes"
-        className="max-w-7xl mx-auto bg-zinc-900 rounded-2xl p-8 shadow-xl text-center mt-20 border-4 border-yellow-500 hover:border-orange-400 transition-all"
+        className="max-w-5xl mx-auto bg-zinc-900 rounded-2xl p-8 shadow-xl text-center mt-20 border-4 border-yellow-500 hover:border-orange-400 transition-all"
         whileHover={{ scale: 1.01 }}
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
@@ -278,14 +275,6 @@ export default function Home() {
         </div>
       </motion.section>
 
-      <div className="text-center mt-10">
-        <Link
-          href="/pages/cadastro"
-          className="inline-flex items-center px-6 py-3 bg-orange-500 text-white font-semibold rounded-full hover:bg-orange-400 transition-all text-base sm:text-lg shadow-lg"
-        >
-          Voltar
-        </Link>
-      </div>
 
       {popupMessage && (
         <motion.div

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import Image from 'next/image';
+import BotaoVoltar from '../components/BotaoVoltar';
 
 export default function IntegrantesPage() {
   const [selectedUserIndex, setSelectedUserIndex] = useState<number | null>(null);
@@ -42,65 +43,103 @@ export default function IntegrantesPage() {
   ];
 
   return (
-    <main className="p-6 max-w-xl mx-auto">
-      <section className="mt-20">
-        <h2 className="text-3xl font-bold text-[#42807D] text-center mb-20">Membros do Projeto</h2>
-        <motion.div
-          className="w-full grid sm:grid-cols-2 gap-8"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-        >
-          {users.map((user, index) => (
-            <motion.div
-              key={index}
-              className={`relative p-6 pt-20 mb-10 rounded-xl shadow-md bg-white border-4 
-                ${
-                  selectedUserIndex === index
-                    ? 'border-green-600 scale-105 shadow-2xl'
-                    : 'border-blue-600'
-                }
-                hover:shadow-xl cursor-pointer text-center transition-all duration-300`}
-              whileHover={{ scale: 1.05 }}
-              onClick={() => setSelectedUserIndex(index)}
-            >
-              <div className="absolute top-[-48px] left-1/2 transform -translate-x-1/2 w-24 h-24 rounded-full border-4 border-blue shadow-lg overflow-hidden">
-                <Image
-                  src={user.photo}
-                  alt={user.name}
-                  width={126}
-                  height={126}
-                  className="object-cover rounded-full"
-                />
-              </div>
-              <h1 className="font-bold text-xl text-[#42807D] mt-3">{user.name}</h1>
-              <p className="text-sm text-gray-500">{user.rm}</p>
-              <div className="flex justify-center gap-4 mt-2">
-                {user.github && (
-                  <motion.a
-                    href={user.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{ scale: 1.3 }}
-                  >
-                    <FaGithub size={20} />
-                  </motion.a>
-                )}
-                {user.linkedin && (
-                  <motion.a
-                    href={user.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{ scale: 1.3 }}
-                  >
-                    <FaLinkedin size={20} />
-                  </motion.a>
-                )}
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-      </section>
+    <main className="px-6 pb-20 pt-32 max-w-7xl mx-auto bg-black min-h-screen">
+      <h2 className="text-4xl font-bold text-center text-orange-500 mb-20 drop-shadow-lg tracking-wide">
+        Integrantes do Projeto
+      </h2>
+
+      <motion.div
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-14"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6 }}
+      >
+        {users.map((user, index) => (
+          <motion.div
+            key={index}
+            className={`relative rounded-3xl p-8 pt-24 bg-[#121212] border-4 cursor-pointer select-none transition-all
+              ${
+                selectedUserIndex === index
+                  ? 'scale-105 border-orange-500 shadow-[0_15px_25px_rgba(255,140,0,0.8)]'
+                  : 'hover:scale-[1.03] border-orange-400 hover:shadow-[0_10px_20px_rgba(255,140,0,0.6)]'
+              }
+            `}
+            whileHover={{ scale: 1.03 }}
+            onClick={() => setSelectedUserIndex(index)}
+            tabIndex={0}
+            role="button"
+            aria-label={`Informações sobre ${user.name}`}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                setSelectedUserIndex(index);
+              }
+            }}
+            style={{
+              filter: `drop-shadow(0 0 ${index * 4 + 8}px rgba(255,140,0,0.5))`,
+              transition: 'all 0.3s ease',
+            }}
+          >
+            <div className="absolute -top-14 left-1/2 transform -translate-x-1/2 w-28 h-28 rounded-full border-4 border-orange-400 shadow-md overflow-hidden bg-white">
+              <Image
+                src={user.photo}
+                alt={user.name}
+                width={112}
+                height={112}
+                className="object-cover rounded-full"
+              />
+            </div>
+
+            <h3 className="mt-4 text-2xl font-bold text-orange-400 text-center">{user.name}</h3>
+            <p className="text-sm text-orange-200 text-center">{user.rm}</p>
+            <p className="mt-2 text-sm text-orange-300 text-center">{user.role}</p>
+
+            {selectedUserIndex === index && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.4 }}
+                className="mt-4 text-orange-200 text-sm space-y-3"
+              >
+                <p className="text-center font-semibold">Contribuições:</p>
+                <p className="text-center">{user.contributions}</p>
+                <p className="text-center font-semibold">Detalhes:</p>
+                <p className="text-center">{user.details}</p>
+              </motion.div>
+            )}
+
+            <div className="flex justify-center gap-6 mt-6">
+              {user.github && (
+                <motion.a
+                  href={user.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.2 }}
+                  className="text-orange-300 hover:text-orange-500 transition-colors"
+                >
+                  <FaGithub size={24} />
+                </motion.a>
+              )}
+              {user.linkedin && (
+                <motion.a
+                  href={user.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.2 }}
+                  className="text-orange-300 hover:text-orange-500 transition-colors"
+                >
+                  <FaLinkedin size={24} />
+                </motion.a>
+              )}
+            </div>
+          </motion.div>
+        ))}
+      </motion.div>
+
+      <div className="mt-20 w-full flex justify-center">
+        <BotaoVoltar />
+      </div>
     </main>
   );
 }
