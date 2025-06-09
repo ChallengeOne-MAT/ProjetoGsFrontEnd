@@ -96,6 +96,9 @@ export default function TelaLogin() {
           </a>
         </p>
       </form>
+       <a href="/pages/home" className="text-orange-500 hover:underline font-semibold">
+para o professor
+          </a>
 
       {/* Botão Voltar centralizado */}
       <div className="mt-6 flex justify-center w-full max-w-md">

@@ -154,38 +154,42 @@ export default function Home() {
 
   return (
     <div className="bg-black text-white min-h-screen py-16 px-4 sm:px-6 lg:px-8 space-y-8 font-sans scroll-smooth relative">
+    <div className="flex items-center justify-center min-h-screen bg-black">
+  <section className="max-w-7xl text-center px-4 sm:px-6 lg:px-8">
     
-    
-      <section className="max-w-7xl text-center px-4 sm:px-6 lg:px-8">
-        
-        <motion.h1
-          initial={{ opacity: 0, y: -40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.4 }}
-          className="text-4xl sm:text-5xl md:text-6xl font-extrabold drop-shadow-lg tracking-wider text-orange-400"
-        >
-          Proteção{' '}
-          <span className="text-red-500 hover:text-red-600 transition duration-300">Imediata</span>{' '}
-          na{' '}
-          <span className="text-yellow-400 hover:text-yellow-500 transition duration-300">
-            Palma da Mão
-          </span>
-        </motion.h1>
-        <p className="mt-8 text-white text-lg sm:text-xl md:text-2xl max-w-4xl mx-auto font-semibold text-center leading-relaxed tracking-wide drop-shadow-xl">
-          Um sistema inteligente que te conecta à ajuda em segundos.
-          <br className="hidden sm:block" /> Pensado para salvar vidas com{' '}
-          <span className="text-orange-400">tecnologia</span>,{' '}
-          <span className="text-yellow-400">acessibilidade</span> e{' '}
-          <span className="text-red-500">velocidade</span>.
-        </p>
-            <SosEnergency/>
+    <motion.h1
+      initial={{ opacity: 0, y: -40 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 1.4 }}
+      className="text-4xl sm:text-5xl md:text-6xl font-extrabold drop-shadow-lg tracking-wider text-orange-400"
+    >
+      Proteção{' '}
+      <span className="text-red-500 hover:text-red-600 transition duration-300">Imediata</span>{' '}
+      na{' '}
+      <span className="text-yellow-400 hover:text-yellow-500 transition duration-300">
+        Palma da Mão
+      </span>
+    </motion.h1>
 
-        <p className="mt-16 text-white text-lg sm:text-xl md:text-2xl max-w-3xl mx-auto font-semibold text-center leading-relaxed tracking-wide drop-shadow-xl animate-pulse">
-          Toque abaixo em caso de emergência.
-          <br className="hidden sm:block" />
-          <span className="text-orange-500">Notificações automáticas</span> serão enviadas instantaneamente. 🚑📡
-        </p>
-      </section>
+    <p className="mt-8 text-white text-lg sm:text-xl md:text-2xl max-w-4xl mx-auto font-semibold text-center leading-relaxed tracking-wide drop-shadow-xl">
+      Um sistema inteligente que te conecta à ajuda em segundos.
+      <br className="hidden sm:block" /> Pensado para salvar vidas com{' '}
+      <span className="text-orange-400">tecnologia</span>,{' '}
+      <span className="text-yellow-400">acessibilidade</span> e{' '}
+      <span className="text-red-500">velocidade</span>.
+    </p>
+
+    <SosEnergency />
+
+    <p className="mt-16 text-white text-lg sm:text-xl md:text-2xl max-w-3xl mx-auto font-semibold text-center leading-relaxed tracking-wide drop-shadow-xl animate-pulse">
+      Toque abaixo em caso de emergência.
+      <br className="hidden sm:block" />
+      <span className="text-orange-500">Notificações automáticas</span> serão enviadas instantaneamente. 🚑📡
+    </p>
+
+  </section>
+</div>
+
 
       <motion.section
         className="max-w-4xl mx-auto text-center p-8 sm:p-10 rounded-3xl shadow-2xl "
