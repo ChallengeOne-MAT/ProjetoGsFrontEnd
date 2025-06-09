@@ -115,29 +115,32 @@ npm run dev
 
 
 
-
-
-🎥 Demonstração
-Clique aqui para ver o vídeo de apresentação do SafeCall:
+## 🎥 Demonstração
+Clique aqui para ver o vídeo de apresentação do SafeCall:  
 🎬 https://youtu.be/0_C4b_yxTHI?si=gTLIE9yuoGh1VJ92
 
-🌍 Exemplos de Uso
-Incêndio:
-Usuário presencia um incêndio → Pressiona SOS → Escolhe "Bombeiros" → Tira foto do incêndio → Escreve "fogo em casa ao lado" → Envia → Chat aberto para suporte contínuo.
+---
 
-Enchente:
-Enchente repentina no bairro → Escolhe "Defesa Civil" → Compartilha localização e estado do local.
+## 🌍 Exemplos de Uso
 
-🔐 Principais APIs do Projeto
-📤 Envio de Relatório
-Endpoint:
-POST /api/emergencia/usuario
+**Incêndio:**  
+Usuário presencia um incêndio → Pressiona **SOS** → Escolhe **"Bombeiros"** → Tira foto do incêndio → Escreve *"fogo em casa ao lado"* → Envia → Chat aberto para suporte contínuo.
 
-Payload de exemplo:
+**Enchente:**  
+Enchente repentina no bairro → Escolhe **"Defesa Civil"** → Compartilha localização e estado do local.
 
-json
-Copiar
-Editar
+---
+
+## 🔐 Principais APIs do Projeto
+
+### 📤 Envio de Relatório
+
+**Endpoint:**  
+`POST /api/emergencia/usuario`
+
+**Payload de exemplo:**
+
+```json
 {
   "cpfUsuario": "123.456.789-00",
   "senha": "senhaJoao456",
@@ -146,7 +149,7 @@ Editar
 ⚠️ Problema com CORS na API
 Durante o desenvolvimento, foi identificado um problema relacionado a CORS (Cross-Origin Resource Sharing) ao tentar fazer requisições para a API.
 
-## ❓ O que é o erro de CORS?
+❓ O que é o erro de CORS?
 O erro de CORS ocorre quando o navegador bloqueia uma requisição feita por uma aplicação web para um domínio diferente daquele onde a aplicação está hospedada.
 Isso acontece por motivos de segurança, para impedir que sites maliciosos façam requisições não autorizadas a outros servidores.
 
@@ -155,3 +158,9 @@ Ao tentar enviar dados para a API (http://localhost:8080/usuario), as requisiç�
 
 🧩 Possível causa
 A API não está configurada para aceitar requisições vindas do domínio onde a aplicação front-end está rodando (ex: http://localhost:3000).
+
+perl
+Copiar
+Editar
+
+Pode colar isso direto no seu `README.md` no GitHub. Se quiser que eu una tudo em um único arquivo com o restante 
