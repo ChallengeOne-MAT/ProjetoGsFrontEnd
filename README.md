@@ -165,35 +165,3 @@ Editar
 
 Pode colar isso direto no seu `README.md` no GitHub. Se quiser que eu una tudo em um único arquivo com o restante 
 
-
-## 🎥 Demonstração
-Clique aqui para ver o vídeo de apresentação do SafeCall:  
-🎬 https://youtu.be/0_C4b_yxTHI?si=gTLIE9yuoGh1VJ92
-
----
-
-## 🌍 Exemplos de Uso
-
-**Incêndio:**  
-Usuário presencia um incêndio → Pressiona **SOS** → Escolhe **"Bombeiros"** → Tira foto do incêndio → Escreve *"fogo em casa ao lado"* → Envia → Chat aberto para suporte contínuo.
-
-**Enchente:**  
-Enchente repentina no bairro → Escolhe **"Defesa Civil"** → Compartilha localização e estado do local.
-
----
-
-## 🔐 Principais APIs do Projeto
-
-### 📤 Envio de Relatório
-
-**Endpoint:**  
-`POST /api/emergencia/usuario`
-
-**Payload de exemplo:**
-
-```json
-{
-  "cpfUsuario": "123.456.789-00",
-  "senha": "senhaJoao456",
-  "telefone": "11915353752"
-}
