@@ -14,6 +14,12 @@ Obrigado por visitar o nosso repositório!
 🧭 Objetivo do Projeto
 O SafeCall permite que qualquer cidadão acione rapidamente os serviços de emergência, envie informações precisas sobre a situação, e mantenha comunicação ativa com autoridades responsáveis. O sistema também compartilha localização em tempo real com os contatos cadastrados para maior segurança.
 
+
+### Vercel
+https://projeto-gs-front-end-9smh.vercel.app/pages/login
+
+
+
 ✅ Funcionalidades Implementadas
 ## Cadastro de Usuário e Autoridade
 Usuário:
@@ -137,6 +143,7 @@ Ao tentar enviar dados para a API (`http://localhost:8080/usuario`), as requisi�
 
 A API não está configurada para aceitar requisições vindas do domínio onde a aplicação front-end está rodando (ex: `http://localhost:3000`).
 
+
 ### Solução
 
 Para resolver o problema, é necessário configurar o servidor da API para permitir requisições CORS do domínio do front-end. Isso geralmente é feito adicionando os cabeçalhos HTTP apropriados, como:
@@ -145,6 +152,8 @@ Para resolver o problema, é necessário configurar o servidor da API para permi
 Access-Control-Allow-Origin: http://localhost:3000
 Access-Control-Allow-Methods: POST, GET, OPTIONS, ...
 Access-Control-Allow-Headers: Content-Type, Authorization, ...
+
+
 
 
 
