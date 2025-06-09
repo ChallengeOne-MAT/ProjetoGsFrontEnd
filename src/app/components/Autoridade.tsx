@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import BotaoVoltar from './BotaoVoltar';
 import SosEnergency from './SosEnergency';
+import Footer from './Footer';
 
   const autoridades = [
     { id: 1, nome: 'Bombeiros', telefone: '193', eventos: ['Incêndio', 'Resgate', 'Alagamento'] },
@@ -181,7 +182,12 @@ export default function TelaEmergencia() {
               </li>
             ))}
           </ul>
-          <BotaoVoltar texto=" ◀ Voltar" className="w-1/2 bg-gray-700 text-yellow-400 py-3 rounded-lg hover:bg-gray-600 transition focus:outline-none focus:ring-4 focus:ring-yellow-4 " />
+<div className="flex justify-center">
+  <BotaoVoltar
+    texto=" ◀ Voltar"
+    className="w-1/2 bg-gray-700 mt-14 text-yellow-400 py-3 rounded-lg hover:bg-gray-600 transition focus:outline-none focus:ring-4 focus:ring-yellow-400"
+  />
+</div>
         <SosEnergency/>
             
           <button
@@ -197,6 +203,8 @@ export default function TelaEmergencia() {
           >
             {carregandoLocalizacao ? 'Obtendo localização...' : 'Prosseguir ➜'}
           </button>
+                          <Footer/>
+
         </>
       )}
 
@@ -297,11 +305,12 @@ export default function TelaEmergencia() {
 
             <button
               onClick={enviar}
-              className="w-1/2 bg-gradient-to-r from-red-600 via-orange-500 to-yellow-400 text-black py-3 rounded-lg font-bold hover:brightness-110 transition focus:outline-none focus:ring-4 focus:ring-yellow-400"
+              className="w-[94%] bg-gradient-to-r from-red-600 via-orange-500 to-yellow-400 text-black py-3 rounded-lg font-bold hover:brightness-110 transition focus:outline-none focus:ring-4 focus:ring-yellow-400"
             >
               Enviar ✅
             </button>
           </div>
+                <Footer/>
 
         </>
       )}

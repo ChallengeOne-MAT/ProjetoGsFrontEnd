@@ -6,7 +6,8 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import BotaoVoltar from './BotaoVoltar';
-import Image from 'next/image';
+import Footer from './Footer';
+import SosEnergency from './SosEnergency';
 
 type Contato = {
   id: number;
@@ -153,7 +154,10 @@ export default function Home() {
 
   return (
     <div className="bg-black text-white min-h-screen py-16 px-4 sm:px-6 lg:px-8 space-y-8 font-sans scroll-smooth relative">
+    
+    
       <section className="max-w-7xl text-center px-4 sm:px-6 lg:px-8">
+        
         <motion.h1
           initial={{ opacity: 0, y: -40 }}
           animate={{ opacity: 1, y: 0 }}
@@ -174,6 +178,7 @@ export default function Home() {
           <span className="text-yellow-400">acessibilidade</span> e{' '}
           <span className="text-red-500">velocidade</span>.
         </p>
+            <SosEnergency/>
 
         <p className="mt-16 text-white text-lg sm:text-xl md:text-2xl max-w-3xl mx-auto font-semibold text-center leading-relaxed tracking-wide drop-shadow-xl animate-pulse">
           Toque abaixo em caso de emergência.
@@ -262,6 +267,7 @@ export default function Home() {
         whileInView={{ opacity: 1 }}
         transition={{ duration: 1.2 }}
       >
+        
         <h3 className="text-2xl sm:text-3xl font-bold text-yellow-400 mb-4 tracking-wide drop-shadow-lg">
           👥 Nossa Equipe
         </h3>
@@ -273,7 +279,11 @@ export default function Home() {
             🔍 Ver Integrantes
           </Link>
         </div>
+         <div className="mt-20 w-full flex justify-center">
+                <BotaoVoltar />
+              </div>
       </motion.section>
+                <Footer/>
 
 
       {popupMessage && (
@@ -301,5 +311,6 @@ export default function Home() {
         }
       `}</style>
     </div>
+    
   );
 }

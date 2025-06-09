@@ -3,7 +3,7 @@ Bem-vindo ao repositório do SafeCall!
 Este WebApp foi desenvolvido para oferecer uma resposta eficiente a situações de emergência e desastres naturais, possibilitando comunicação rápida com autoridades e contatos de emergência.
 
 👨‍💻 Integrantes do Time
-Nome Lucas Almeida de Siqueira - RM XXXXXXX
+Nome Lucas Almeida de Siqueira - RM 560914
 
 Nome Sulamita Viégas dos Santos - RM 561089
 
@@ -92,15 +92,15 @@ Google Maps API (localização em tempo real)
 
 
 
-git clone https://github.com/seuusuario/SafeCall-App.git
+git clone: https://github.com/ChallengeOne-MAT/ProjetoGsFrontEnd.git
 cd SafeCall-App
 npm install
 nmp run dev
 Acesse o app em um dispositivo mobile ou outros tipos de telas.
 
 🎥 Demonstração
-Clique aqui para ver o vídeo de apresentação do SafeCall:
-hhtps:
+Clique aqui para ver o vídeo de apresentação do SafeCall: 
+https://youtu.be/0_C4b_yxTHI?si=gTLIE9yuoGh1VJ92
 
 🌍 Exemplos de Uso
 Usuário presencia um incêndio → Pressiona SOS → Escolhe "Bombeiros" → Tira foto do incêndio → Escreve "fogo em casa ao lado" → Envia → Chat aberto para suporte contínuo.

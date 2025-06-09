@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 type Contato = {
   nome: string;
@@ -16,6 +16,7 @@ export default function ButtonSos({ contatos }: ButtonSosProps) {
   const [carregando, setCarregando] = useState(false);
 
   const acionarSOS = () => {
+    console.log('Botão clicado');
     setErro('');
     setMensagem('');
     setCarregando(true);
@@ -23,14 +24,18 @@ export default function ButtonSos({ contatos }: ButtonSosProps) {
     let listaContatos: Contato[] = [];
 
     if (contatos && contatos.length > 0) {
+      console.log('Usando contatos passados via props');
       listaContatos = contatos;
     } else {
       const dados = localStorage.getItem('contatosEmergencia');
+      console.log('Lendo contatos do localStorage:', dados);
+
       if (!dados) {
         setErro('Nenhum contato cadastrado.');
         setCarregando(false);
         return;
       }
+
       try {
         listaContatos = JSON.parse(dados);
       } catch {
@@ -46,10 +51,12 @@ export default function ButtonSos({ contatos }: ButtonSosProps) {
       return;
     }
 
+    console.log('Solicitando localização...');
     navigator.geolocation.getCurrentPosition(
       async (pos) => {
         const { latitude, longitude } = pos.coords;
         const linkMapa = `https://maps.google.com/?q=${latitude},${longitude}`;
+        console.log('Localização obtida:', latitude, longitude);
 
         try {
           const response = await fetch('/api/notificar-contatos', {
@@ -59,19 +66,22 @@ export default function ButtonSos({ contatos }: ButtonSosProps) {
           });
 
           const data = await response.json();
+          console.log('Resposta da API:', data);
 
           if (response.ok && data.sucesso) {
             setMensagem('Mensagens enviadas automaticamente via WhatsApp.');
           } else {
             setErro(data.erro || 'Erro ao enviar mensagens.');
           }
-        } catch {
+        } catch (err) {
+          console.error('Erro de rede:', err);
           setErro('Erro de conexão com o servidor.');
         }
 
         setCarregando(false);
       },
-      () => {
+      (err) => {
+        console.error('Erro ao obter localização:', err);
         setErro('Erro ao obter localização.');
         setCarregando(false);
       }

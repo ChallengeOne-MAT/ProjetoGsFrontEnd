@@ -11,14 +11,14 @@ export default function IntegrantesPage() {
 
   const users = [
     {
-      name: 'Lucas',
-      rm: 'RM5',
+      name: 'Lucas Almeida de Siqueira',
+      rm: 'RM560914',
       role: 'Responsável pelo back-end',
       contributions: 'Integração com APIs, autenticação e lógica de dados em tempo real.',
       details: 'Lucas é especializado em construir a base sólida do sistema. Trabalhou no backend e integração com serviços externos.',
       github: '',
       linkedin: '',
-      photo: '/img/pedro.JPEG',
+      photo: '/img/lucass.JPG',
     },
     {
       name: 'Sulamita Viegas Dos Santos',
