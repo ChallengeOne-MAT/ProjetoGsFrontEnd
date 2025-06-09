@@ -16,8 +16,8 @@ export default function IntegrantesPage() {
       role: 'Responsável pelo back-end',
       contributions: 'Integração com APIs, autenticação e lógica de dados em tempo real.',
       details: 'Lucas é especializado em construir a base sólida do sistema. Trabalhou no backend e integração com serviços externos.',
-      github: '',
-      linkedin: '',
+      github: 'https://github.com/Lucassiqueira1910',
+      linkedin: 'https://www.linkedin.com/in/lucas-siqueira-aa3b90263/',
       photo: '/img/lucass.JPG',
     },
     {

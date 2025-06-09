@@ -15,7 +15,7 @@ Obrigado por visitar o nosso repositório!
 O SafeCall permite que qualquer cidadão acione rapidamente os serviços de emergência, envie informações precisas sobre a situação, e mantenha comunicação ativa com autoridades responsáveis. O sistema também compartilha localização em tempo real com os contatos cadastrados para maior segurança.
 
 ✅ Funcionalidades Implementadas
-1. Cadastro de Usuário e Autoridade
+## Cadastro de Usuário e Autoridade
 Usuário:
 
 CPF
@@ -30,7 +30,7 @@ cpf (administrador da SAFECALL)
 
 Senha
 
-2. Tela de Emergência (Botão SOS)
+##  Tela de Emergência (Botão SOS)
 Um botão central grande "SOS".
 
 Ao ser pressionado:
@@ -43,7 +43,7 @@ Permite:
 
 Adicionar/Remover contatos de emergência.
 
-3. Escolha da Autoridade
+## Escolha da Autoridade
 Lista de autoridades disponíveis:
 
 Bombeiros
@@ -60,7 +60,7 @@ Selecionar autoridade e prosseguir.
 
 Ícone de chamada rápida.
 
-4. Filtragem Rápida da Situação
+## Filtragem Rápida da Situação
 Exibe eventos possíveis conforme a autoridade selecionada.
 Exemplo:
 
@@ -86,7 +86,7 @@ Uso contínuo até a finalização do atendimento.
 Autoridade pode solicitar mais detalhes ao chegar no local.
 
 
-🧰 Tecnologias Utilizadas
+## 🧰 Tecnologias Utilizadas
 
 Google Maps API (localização em tempo real)
 
@@ -98,11 +98,11 @@ npm install
 nmp run dev
 Acesse o app em um dispositivo mobile ou outros tipos de telas.
 
-🎥 Demonstração
+## 🎥 Demonstração
 Clique aqui para ver o vídeo de apresentação do SafeCall: 
 https://youtu.be/0_C4b_yxTHI?si=gTLIE9yuoGh1VJ92
 
-🌍 Exemplos de Uso
+## 🌍 Exemplos de Uso
 Usuário presencia um incêndio → Pressiona SOS → Escolhe "Bombeiros" → Tira foto do incêndio → Escreve "fogo em casa ao lado" → Envia → Chat aberto para suporte contínuo.
 
 Enchente repentina no bairro → Escolhe "Defesa Civil" → Compartilha localização e estado do local.
@@ -119,4 +119,38 @@ Payload:
   senha: "senhaJoao456",
   telefone: "11915353752"
 }
+
+
+## Problema com CORS na API
+
+Durante o desenvolvimento, foi identificado um problema relacionado a **CORS (Cross-Origin Resource Sharing)** ao tentar fazer requisições para a API.
+
+### O que é o erro de CORS?
+
+O erro de CORS ocorre quando o navegador bloqueia uma requisição feita por uma aplicação web para um domínio diferente daquele onde a aplicação está hospedada. Isso acontece por motivos de segurança, para impedir que sites maliciosos façam requisições não autorizadas a outros servidores.
+
+### Como isso afeta a aplicação?
+
+Ao tentar enviar dados para a API (`http://localhost:8080/usuario`), as requisições são bloqueadas pelo navegador, impedindo que o cadastro funcione corretamente.
+
+### Possível causa
+
+A API não está configurada para aceitar requisições vindas do domínio onde a aplicação front-end está rodando (ex: `http://localhost:3000`).
+
+### Solução
+
+Para resolver o problema, é necessário configurar o servidor da API para permitir requisições CORS do domínio do front-end. Isso geralmente é feito adicionando os cabeçalhos HTTP apropriados, como:
+
+```http
+Access-Control-Allow-Origin: http://localhost:3000
+Access-Control-Allow-Methods: POST, GET, OPTIONS, ...
+Access-Control-Allow-Headers: Content-Type, Authorization, ...
+
+
+
+
+
+
+
+
 

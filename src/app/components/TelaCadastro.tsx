@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import BotaoVoltar from './BotaoVoltar';
 
 export default function TelaCadastro() {
@@ -12,7 +12,6 @@ export default function TelaCadastro() {
   const [telefone, setTelefone] = useState('');
   const [erro, setErro] = useState('');
 
-  // Validação completa de CPF
   const validarCPF = (cpf: string) => {
     cpf = cpf.replace(/[^\d]+/g, '');
     if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
@@ -30,7 +29,6 @@ export default function TelaCadastro() {
     return resto === parseInt(cpf.charAt(10));
   };
 
-  // Limpa o erro após 5 segundos
   useEffect(() => {
     if (erro) {
       const timer = setTimeout(() => setErro(''), 5000);
@@ -58,7 +56,7 @@ export default function TelaCadastro() {
       }
 
       alert('Cadastro realizado com sucesso!');
-      router.push('/login'); // rota corrigida
+      router.push('/login');
     } catch (err: any) {
       setErro(err.message || 'Erro na requisição.');
     }
@@ -74,7 +72,8 @@ export default function TelaCadastro() {
           className="p-8 sm:p-10 bg-gray-900 rounded-xl shadow-xl text-white border-4"
           style={{
             borderImageSlice: 1,
-            borderImageSource: 'linear-gradient(to right, #f97316, #facc15, #f97316)',
+            borderImageSource:
+              'linear-gradient(to right, #f97316, #facc15, #f97316)',
           }}
         >
           <h1 className="text-3xl font-extrabold mb-8 text-yellow-400 tracking-wide text-center">
@@ -97,7 +96,9 @@ export default function TelaCadastro() {
             className="w-full p-3 rounded-lg bg-gray-800 border-2 border-gray-700 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400 text-white placeholder-gray-400 transition"
           />
 
-          <label className="block text-yellow-400 font-semibold mt-6 mb-2">Telefone</label>
+          <label className="block text-yellow-400 font-semibold mt-6 mb-2">
+            Telefone
+          </label>
           <input
             value={telefone}
             onChange={(e) => setTelefone(e.target.value.replace(/\D/g, ''))}
@@ -106,7 +107,9 @@ export default function TelaCadastro() {
             className="w-full p-3 rounded-lg bg-gray-800 border-2 border-gray-700 focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400 text-white placeholder-gray-400 transition"
           />
 
-          <label className="block text-yellow-400 font-semibold mt-6 mb-2">Senha</label>
+          <label className="block text-yellow-400 font-semibold mt-6 mb-2">
+            Senha
+          </label>
           <input
             type="password"
             value={senha}
@@ -147,11 +150,9 @@ export default function TelaCadastro() {
         </form>
 
         <div className="flex justify-center mt-4">
-          <BotaoVoltar
-            texto="◀ Voltar"
-            className="w-1/2 bg-gray-700 text-yellow-400 py-3 rounded-lg hover:bg-gray-600 transition focus:outline-none focus:ring-4 focus:ring-yellow-400"
-            onClick={() => router.back()}
-          />
+          <div className="mt-20 w-full flex justify-center">
+            <BotaoVoltar />
+          </div>
         </div>
       </div>
 
